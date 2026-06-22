@@ -1,0 +1,15 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+property activeFocusOwner: String
+property activeFocusMode: String
+
+notification focusChanged(owner: String, mode: String, decision: String)
+
+method requestFocus(owner: String, priority: Int32, mode: String) -> decision: String
+method releaseFocus(owner: String) -> ok: Boolean
+method focusOwner() -> owner: String
+method focusMode() -> mode: String
+method frame() -> text: String

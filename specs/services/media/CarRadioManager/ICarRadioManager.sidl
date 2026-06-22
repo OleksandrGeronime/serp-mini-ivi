@@ -1,0 +1,15 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+property station: String
+property signal: Int32
+property name: String
+
+notification tunerChanged(station: String, event: String)
+
+method tune(frequency: String) -> ok: Boolean
+method seek(direction: String) -> ok: Boolean
+method tunerStation() -> station: String
+method frame() -> text: String

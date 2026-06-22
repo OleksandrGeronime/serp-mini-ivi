@@ -1,0 +1,16 @@
+service:
+  version:
+    major: 1
+    minor: 0
+  type: generated
+
+implements:
+  - ICarMediaManager
+  - ICarMediaDebugPrimitives
+
+uses:
+  - ICarAudioManager
+
+logging:
+  console: debug
+  file: debug

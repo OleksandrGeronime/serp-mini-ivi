@@ -1,0 +1,49 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+PlaybackState: enum
+  stopped
+  playing
+  paused
+  buffering
+
+RepeatMode: enum
+  off
+  repeatOne
+  repeatAll
+
+TrackInfo: struct
+  title: String
+  artist: String
+  duration: UInt32
+
+property currentPlaybackState: PlaybackState
+property currentPlaybackSource: String
+property currentTrack: optional<TrackInfo>
+property playlistSize: UInt32
+property trackIndex: Int32
+property currentPositionMs: Int32
+property trackList: vector<TrackInfo>
+property shuffleEnabled: Boolean
+property currentRepeatMode: RepeatMode
+
+notification playbackChanged(state: PlaybackState, track: optional<TrackInfo>)
+
+method play(source: String) -> ok: Boolean
+method pause() -> ok: Boolean
+method next() -> ok: Boolean
+method previous() -> ok: Boolean
+method playAt(index: Int32) -> ok: Boolean
+method getTrackList() -> tracks: vector<TrackInfo>
+method seekTo(positionMs: Int32) -> ok: Boolean
+method setShuffleEnabled(enabled: Boolean) -> ok: Boolean
+method setRepeatMode(mode: RepeatMode) -> ok: Boolean
+method onFocusEvent(event: String) -> ok: Boolean
+method recent() -> tracks: vector<TrackInfo>
+method sourceHistory() -> history: map<String, TrackInfo>
+method getPlaybackState() -> state: PlaybackState
+method playbackSource() -> source: String
+method playbackTrack() -> track: optional<TrackInfo>
+method frame() -> text: String

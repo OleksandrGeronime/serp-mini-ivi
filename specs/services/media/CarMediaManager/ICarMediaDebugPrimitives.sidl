@@ -1,0 +1,30 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+DebugLevel: enum
+  off
+  basic
+  verbose
+
+DebugSample: struct
+  label: String
+  count: UInt32
+  enabled: Boolean
+
+property debugEnabled: Boolean
+property currentDebugLevel: DebugLevel
+property debugCounter: UInt32
+property debugTemperature: Float
+property currentDebugSample: DebugSample
+property debugTags: vector<String>
+property debugOptionalNote: optional<String>
+
+notification debugTick(counter: UInt32, sample: DebugSample)
+notification debugMessage(level: DebugLevel, text: String)
+
+method debugEcho(text: String) -> echoed: String
+method debugMix(flag: Boolean, count: UInt32, ratio: Float) -> sample: DebugSample
+method debugList(seed: String) -> values: vector<String>
+method debugLookup(key: String) -> scores: map<String, UInt32>
