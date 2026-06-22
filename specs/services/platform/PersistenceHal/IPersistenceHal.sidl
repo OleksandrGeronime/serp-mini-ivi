@@ -1,0 +1,13 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+property storageSummary: String
+
+notification valueChanged(key: String, value: String)
+
+method getValue(key: String) -> value: String
+method setValue(key: String, value: String) -> ok: Boolean
+method removeValue(key: String) -> ok: Boolean
+method dump() -> text: String

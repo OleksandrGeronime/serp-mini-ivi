@@ -1,0 +1,14 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+property currentRadioStation: String
+
+notification radioHardwareTuned(station: String)
+
+method tune(frequency: String) -> station: String
+method seek(direction: String) -> station: String
+method frame() -> text: String
+
+server_stream ScanStations() -> station: String

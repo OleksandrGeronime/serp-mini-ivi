@@ -1,0 +1,11 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+property climateState: String
+
+notification climateApplied(zone: String, temp: Int32, fan: Int32)
+
+method applyState(zone: String, temp: Int32, fan: Int32) -> ok: Boolean
+method frame() -> text: String

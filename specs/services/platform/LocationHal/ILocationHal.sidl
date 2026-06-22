@@ -1,0 +1,21 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+import common/navigation.sidl
+
+property currentPosition: GpsPosition
+property activeDestination: String
+property currentManeuver: String
+
+notification positionUpdated(position: GpsPosition)
+notification routeCalculated(destination: String, route: String)
+notification maneuverChanged(maneuver: String)
+
+method calculateRoute(destination: String) -> route: String
+method nextManeuver() -> maneuver: String
+method frame() -> text: String
+
+server_stream PositionStream(minAccuracyM: Int32) -> position: GpsPosition
+client_stream UploadRoute(point: GpsPosition) -> pointCount: Int32

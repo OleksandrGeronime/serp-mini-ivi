@@ -1,0 +1,120 @@
+service: LocationHal
+description:
+  ai_generated: ''
+  user_input: '
+
+    # USER: EDIT THIS BLOCK
+
+    # Describe the overall purpose of this service
+
+    '
+properties:
+  currentPosition:
+    type: GpsPosition
+    initial_value: None
+    ai_generated: ''
+    user_input: '
+
+      # USER: EDIT THIS BLOCK
+
+      # Describe what ''currentPosition'' represents and when it updates
+
+      '
+  activeDestination:
+    type: String
+    initial_value: None
+    ai_generated: ''
+    user_input: '
+
+      # USER: EDIT THIS BLOCK
+
+      # Describe what ''activeDestination'' represents and when it updates
+
+      '
+  currentManeuver:
+    type: String
+    initial_value: None
+    ai_generated: ''
+    user_input: '
+
+      # USER: EDIT THIS BLOCK
+
+      # Describe what ''currentManeuver'' represents and when it updates
+
+      '
+methods:
+  calculateRoute:
+    signature: 'calculateRoute(destination: String) -> String'
+    params:
+      destination: String
+    returns: String
+    ai_generated: ''
+    user_input: '
+
+      # USER: EDIT THIS BLOCK
+
+      # Describe what this method does, edge cases, dependencies
+
+      '
+  nextManeuver:
+    signature: nextManeuver() -> String
+    params: {}
+    returns: String
+    ai_generated: ''
+    user_input: '
+
+      # USER: EDIT THIS BLOCK
+
+      # Describe what this method does, edge cases, dependencies
+
+      '
+  frame:
+    signature: frame() -> String
+    params: {}
+    returns: String
+    ai_generated: ''
+    user_input: '
+
+      # USER: EDIT THIS BLOCK
+
+      # Describe what this method does, edge cases, dependencies
+
+      '
+notifications:
+  positionUpdated:
+    signature: 'positionUpdated(position: GpsPosition)'
+    params:
+      position: GpsPosition
+    ai_generated: ''
+    user_input: '
+
+      # USER: EDIT THIS BLOCK
+
+      # Describe when this notification is emitted
+
+      '
+  routeCalculated:
+    signature: 'routeCalculated(destination: String, route: String)'
+    params:
+      destination: String
+      route: String
+    ai_generated: ''
+    user_input: '
+
+      # USER: EDIT THIS BLOCK
+
+      # Describe when this notification is emitted
+
+      '
+  maneuverChanged:
+    signature: 'maneuverChanged(maneuver: String)'
+    params:
+      maneuver: String
+    ai_generated: ''
+    user_input: '
+
+      # USER: EDIT THIS BLOCK
+
+      # Describe when this notification is emitted
+
+      '
