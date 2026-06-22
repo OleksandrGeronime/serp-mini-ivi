@@ -1,0 +1,23 @@
+root:
+  version:
+    major: 1
+    minor: 0
+  name: Minivi
+  namespace: serp.minivi
+
+deployments:
+  - deployments/monolith.suml
+  - deployments/multiprocess_dbus_console.suml
+  - deployments/multiprocess_dbus_qtquick.suml
+  - deployments/multiprocess_grpc_qtquick.suml
+
+paths:
+  src: src
+  gen: build/gen
+  scripts: scripts
+  tests: tests
+  build: build
+
+generation_defaults:
+  mock: true
+  tests: true

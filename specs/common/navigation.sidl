@@ -1,0 +1,10 @@
+types:
+  version:
+    major: 1
+    minor: 0
+
+GpsPosition: struct
+  latitude: Double
+  longitude: Double
+  speed: Double
+  heading: Double

@@ -1,0 +1,16 @@
+types:
+  version:
+    major: 1
+    minor: 0
+
+ErrorCode: enum
+  ok
+  not_found
+  permission_denied
+  invalid_argument
+  internal_error
+
+ServiceStatus: struct
+  name: String
+  state: String
+  message: String
