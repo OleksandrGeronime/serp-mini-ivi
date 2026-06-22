@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file>Main.qml</file>
+        <file>modules/RadioPane.qml</file>
+        <file>modules/MediaPane.qml</file>
+        <file>modules/ClimatePane.qml</file>
+        <file>modules/NavigationPane.qml</file>
+        <file>modules/PhonePane.qml</file>
+        <file>modules/VehiclePane.qml</file>
+        <file>modules/SettingsPane.qml</file>
+        <file>modules/NotificationsPane.qml</file>
+    </qresource>
+</RCC>
