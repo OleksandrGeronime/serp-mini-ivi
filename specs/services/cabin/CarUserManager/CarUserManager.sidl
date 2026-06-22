@@ -1,0 +1,15 @@
+service:
+  version:
+    major: 1
+    minor: 0
+  type: generated
+
+implements:
+  - ICarUserManager
+
+uses:
+  - IPersistenceService
+
+logging:
+  console: debug
+  file: debug

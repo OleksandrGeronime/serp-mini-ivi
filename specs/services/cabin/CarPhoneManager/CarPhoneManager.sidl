@@ -1,0 +1,15 @@
+service:
+  version:
+    major: 1
+    minor: 0
+  type: generated
+
+implements:
+  - ICarPhoneManager
+
+uses:
+  - IPhoneHal
+
+logging:
+  console: debug
+  file: debug

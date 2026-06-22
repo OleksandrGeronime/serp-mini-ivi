@@ -1,0 +1,31 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+property driverTemp: Double
+property passengerTemp: Double
+property fanSpeed: Int32
+property acOn: Boolean
+property syncOn: Boolean
+property autoOn: Boolean
+property frontDefrost: Boolean
+property rearDefrost: Boolean
+
+notification hvacChanged(zone: String, temperature: String, fan: String)
+
+method setTemperature(zone: String, temp: Double) -> ok: Boolean
+method setDriverTemp(temp: Double) -> ok: Boolean
+method setPassengerTemp(temp: Double) -> ok: Boolean
+method setFan(fan: Int32) -> ok: Boolean
+method setFanSpeed(speed: Int32) -> ok: Boolean
+method toggleAc() -> ok: Boolean
+method toggleSync() -> ok: Boolean
+method toggleAuto() -> ok: Boolean
+method toggleFrontDefrost() -> ok: Boolean
+method toggleRearDefrost() -> ok: Boolean
+method applyProfile(profile: String) -> ok: Boolean
+method hvacDriverTemperature() -> temperature: String
+method hvacPassengerTemperature() -> temperature: String
+method hvacFan() -> fan: String
+method frame() -> text: String

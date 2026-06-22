@@ -1,0 +1,32 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+import common/navigation.sidl
+
+GuidanceState: enum
+  inactive
+  active
+  recalculating
+  arrived
+
+property routeActive: Boolean
+property destination: String
+property latitude: Double
+property longitude: Double
+property speed: Double
+property heading: Double
+property distanceToTarget: Double
+property currentGuidanceState: GuidanceState
+
+notification positionUpdated(position: GpsPosition)
+notification guidanceChanged(state: GuidanceState, destination: String)
+notification guidancePromptReady(prompt: String)
+
+method startRoute(destination: String) -> ok: Boolean
+method nextPrompt() -> prompt: String
+method cancelRoute() -> ok: Boolean
+method getGuidanceState() -> state: GuidanceState
+method guidanceDestination() -> destination: String
+method frame() -> text: String
