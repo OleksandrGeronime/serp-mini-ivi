@@ -1,0 +1,14 @@
+hmi:
+  version:
+    major: 1
+    minor: 0
+
+uses:
+  - ICarRadioManager
+  - ICarMediaManager
+  - ICarClimateManager
+  - ICarNavigationManager
+  - ICarPhoneManager
+  - ICarPropertyService
+  - ICarUserManager
+  - ICarNotificationManager

@@ -1,0 +1,69 @@
+@startuml monolith
+
+' ==============================================================
+' SERP profile — do not edit
+' ==============================================================
+left to right direction
+hide stereotype
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+skinparam component<<generated_service>> {
+  BackgroundColor #DFF3DF
+  BorderColor #4B8B4B
+}
+
+skinparam component<<external_service>> {
+  BackgroundColor #FFE6C7
+  BorderColor #B87925
+}
+
+skinparam component<<generated_client>> {
+  BackgroundColor #DDEBFF
+  BorderColor #3A6EA5
+}
+' ==============================================================
+' Deployment layout — AAOS-inspired monolith
+' ==============================================================
+
+package minivi_app {
+  component VehicleHal <<generated_service>>
+  component ClimateHal <<generated_service>>
+  component PhoneHal <<generated_service>>
+  component RadioHal <<generated_service>>
+  component LocationHal <<generated_service>>
+  component AudioHal <<generated_service>>
+  component PersistenceHal <<generated_service>>
+
+  component PersistenceService <<generated_service>>
+  component CarNotificationManager <<generated_service>>
+  component CarPropertyService <<generated_service>>
+  component CarPowerManager <<generated_service>>
+  component CarClimateManager <<generated_service>>
+  component CarNavigationManager <<generated_service>>
+  component CarPhoneManager <<generated_service>>
+  component CarUserManager <<generated_service>>
+
+  component CarAudioManager <<generated_service>>
+  component CarMediaManager <<generated_service>>
+  component CarRadioManager <<generated_service>>
+}
+
+CarNotificationManager --> PersistenceService : serp
+CarPropertyService --> VehicleHal : serp
+CarPropertyService --> PersistenceService : serp
+CarPowerManager --> CarPropertyService : serp
+CarClimateManager --> ClimateHal : serp
+CarNavigationManager --> LocationHal : serp
+CarPhoneManager --> PhoneHal : serp
+CarUserManager --> PersistenceService : serp
+
+CarAudioManager --> AudioHal : serp
+CarMediaManager --> CarAudioManager : serp
+CarRadioManager --> CarAudioManager : serp
+CarRadioManager --> RadioHal : serp
+CarRadioManager --> PersistenceService : serp
+
+@enduml

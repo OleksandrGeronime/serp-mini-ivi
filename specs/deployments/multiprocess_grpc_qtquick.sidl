@@ -1,0 +1,59 @@
+deployment:
+  version:
+    major: 1
+    minor: 0
+  mode: multiprocess
+  ipc: grpc
+
+domains:
+  service:
+    launcher: script
+    defaults:
+      restart: false
+      env:
+        SERP_LOG_LEVEL: debug
+      logging:
+        level: debug
+        strategies:
+          console: true
+          file:
+            dir: /tmp/serp/logs
+            max_size_mb: 10
+            max_files: 5
+
+processes:
+  vehicle_hal_app:
+    domain: service
+    env:
+      SERP_GRPC_ADDRESS: "0.0.0.0:50051"
+    logging:
+      app_id: VHL
+  audio_hal_app:
+    domain: service
+    env:
+      SERP_GRPC_ADDRESS: "0.0.0.0:50052"
+    logging:
+      app_id: AHL
+  car_service_app:
+    domain: service
+    env:
+      SERP_GRPC_ADDRESS: "0.0.0.0:50053"
+    logging:
+      app_id: CAR
+  media_app:
+    domain: service
+    env:
+      SERP_GRPC_ADDRESS: "0.0.0.0:50054"
+    logging:
+      app_id: MED
+  hmi_screen_app:
+    domain: service
+    env:
+      SERP_GRPC_ADDRESS: "0.0.0.0:50055"
+    logging:
+      app_id: HMI
+  hmi_app:
+    domain: service
+    template: qtquick6_hmi
+    logging:
+      app_id: HMIQ

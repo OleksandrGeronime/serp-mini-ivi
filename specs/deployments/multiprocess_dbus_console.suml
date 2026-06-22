@@ -1,0 +1,90 @@
+@startuml multiprocess_dbus_console
+
+' ==============================================================
+' SERP profile — do not edit
+' ==============================================================
+left to right direction
+hide stereotype
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+skinparam component<<generated_service>> {
+  BackgroundColor #DFF3DF
+  BorderColor #4B8B4B
+}
+
+skinparam component<<external_service>> {
+  BackgroundColor #FFE6C7
+  BorderColor #B87925
+}
+
+skinparam component<<generated_client>> {
+  BackgroundColor #DDEBFF
+  BorderColor #3A6EA5
+}
+' ==============================================================
+' Deployment layout — AAOS-inspired D-Bus topology
+' ==============================================================
+
+package vehicle_hal_app {
+  component VehicleHal <<generated_service>>
+  component ClimateHal <<generated_service>>
+  component PhoneHal <<generated_service>>
+  component RadioHal <<generated_service>>
+  component LocationHal <<generated_service>>
+  component PersistenceHal <<generated_service>>
+}
+
+package audio_hal_app {
+  component AudioHal <<generated_service>>
+}
+
+package car_service_app {
+  component PersistenceService <<generated_service>>
+  component CarNotificationManager <<generated_service>>
+  component CarPropertyService <<generated_service>>
+  component CarPowerManager <<generated_service>>
+  component CarClimateManager <<generated_service>>
+  component CarNavigationManager <<generated_service>>
+  component CarPhoneManager <<generated_service>>
+  component CarUserManager <<generated_service>>
+}
+
+package media_app {
+  component CarAudioManager <<generated_service>>
+  component CarMediaManager <<generated_service>>
+  component CarRadioManager <<generated_service>>
+}
+
+package hmi_app {
+  component ConsoleHmi <<generated_client>>
+}
+
+CarNotificationManager --> PersistenceService : dbus
+CarPropertyService --> VehicleHal : dbus
+CarPropertyService --> PersistenceService : dbus
+CarPowerManager --> CarPropertyService : dbus
+CarClimateManager --> ClimateHal : dbus
+CarNavigationManager --> LocationHal : dbus
+CarPhoneManager --> PhoneHal : dbus
+CarUserManager --> PersistenceService : dbus
+
+CarAudioManager --> AudioHal : dbus
+CarMediaManager --> CarAudioManager : dbus
+CarRadioManager --> CarAudioManager : dbus
+CarRadioManager --> RadioHal : dbus
+CarRadioManager --> PersistenceService : dbus
+
+ConsoleHmi --> CarClimateManager : dbus
+ConsoleHmi --> CarNavigationManager : dbus
+ConsoleHmi --> CarPhoneManager : dbus
+ConsoleHmi --> CarUserManager : dbus
+ConsoleHmi --> CarPropertyService : dbus
+ConsoleHmi --> CarNotificationManager : dbus
+ConsoleHmi --> CarAudioManager : dbus
+ConsoleHmi --> CarMediaManager : dbus
+ConsoleHmi --> CarRadioManager : dbus
+
+@enduml

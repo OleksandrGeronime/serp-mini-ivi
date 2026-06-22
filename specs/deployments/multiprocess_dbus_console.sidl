@@ -1,0 +1,44 @@
+deployment:
+  version:
+    major: 1
+    minor: 0
+  mode: multiprocess
+
+domains:
+  service:
+    launcher: systemd
+    install:
+      prefix: /opt/serp/minivi
+      user: serp
+      group: serp
+    defaults:
+      restart: on-failure
+      restart_sec: 2
+      start_after:
+        - dbus.service
+      requires:
+        - dbus.service
+      env:
+        SERP_LOG_LEVEL: info
+  hmi_session:
+    launcher: script
+    defaults:
+      restart: false
+
+processes:
+  vehicle_hal_app:
+    domain: service
+  audio_hal_app:
+    domain: service
+  car_service_app:
+    domain: service
+    start_after:
+      - serp-multiprocess-dbus-console-vehicle-hal-app.service
+  media_app:
+    domain: service
+    start_after:
+      - serp-multiprocess-dbus-console-audio-hal-app.service
+      - serp-multiprocess-dbus-console-car-service-app.service
+  hmi_app:
+    domain: hmi_session
+    template: console_hmi

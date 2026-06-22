@@ -1,0 +1,70 @@
+deployment:
+  version:
+    major: 1
+    minor: 0
+  mode: multiprocess
+
+domains:
+  system_services:
+    launcher: systemd
+    install:
+      prefix: /opt/serp/minivi
+      user: serp
+      group: serp
+    defaults:
+      restart: on-failure
+      restart_sec: 2
+      start_after:
+        - dbus.service
+      requires:
+        - dbus.service
+      env_file: /etc/serp/minivi.env
+      logging:
+        level: debug
+        strategies:
+          file:
+            dir: /tmp/serp/logs
+            max_size_mb: 10
+            max_files: 5
+  cockpit_hmi:
+    launcher: script
+    defaults:
+      restart: false
+      env:
+        QT_QUICK_CONTROLS_STYLE: Material
+      logging:
+        level: debug
+        strategies:
+          console: true
+          file:
+            dir: /tmp/serp/logs
+            max_size_mb: 10
+            max_files: 5
+
+processes:
+  vehicle_hal_app:
+    domain: system_services
+    logging:
+      app_id: VHL
+  audio_hal_app:
+    domain: system_services
+    logging:
+      app_id: AHL
+  car_service_app:
+    domain: system_services
+    start_after:
+      - serp-multiprocess-dbus-qtquick-vehicle-hal-app.service
+    logging:
+      app_id: CAR
+  media_app:
+    domain: system_services
+    start_after:
+      - serp-multiprocess-dbus-qtquick-audio-hal-app.service
+      - serp-multiprocess-dbus-qtquick-car-service-app.service
+    logging:
+      app_id: MED
+  hmi_app:
+    domain: cockpit_hmi
+    template: qtquick_hmi
+    logging:
+      app_id: HMIQ
