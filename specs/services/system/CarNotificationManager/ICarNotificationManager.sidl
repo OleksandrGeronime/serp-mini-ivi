@@ -1,0 +1,28 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+NotificationPriority: enum
+  low
+  normal
+  high
+  critical
+
+CarNotification: struct
+  id: Int32
+  title: String
+  category: String
+  priority: NotificationPriority
+
+property notifications: vector<CarNotification>
+property unreadCount: Int32
+
+notification notificationPosted(item: CarNotification)
+notification notificationDismissed(id: Int32)
+
+method post(target: String, priority: NotificationPriority, text: String) -> id: Int32
+method listAll() -> items: vector<CarNotification>
+method dismiss(id: Int32) -> ok: Boolean
+method dismissAll() -> ok: Boolean
+method markRead(id: Int32) -> ok: Boolean

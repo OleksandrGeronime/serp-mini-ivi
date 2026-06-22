@@ -1,0 +1,18 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+property ignition: Boolean
+property gear: String
+property speed: Double
+property moving: Boolean
+property odometer: Double
+property fuelLevel: Double
+
+notification vehiclePropertyChanged(key: String, value: String)
+
+method setProperty(key: String, value: String) -> ok: Boolean
+method getProperty(key: String) -> value: String
+method subscribeProperty(key: String) -> ok: Boolean
+method frame() -> text: String

@@ -1,0 +1,17 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+PowerState: enum
+  off
+  on
+  deep_sleep
+  shutdown
+
+property currentPowerState: PowerState
+
+notification powerStateChanged(state: PowerState)
+
+method requestState(state: PowerState) -> ok: Boolean
+method getPowerState() -> state: PowerState
