@@ -1,0 +1,6 @@
+/data/*.txt
+/logs/
+/.run/
+/build/
+
+.serp/
