@@ -21,10 +21,10 @@ namespace Minivi
         void onInit(const std::function<void(serp::Service::Status)> reply) override;
         void onDeinit(const std::function<void(serp::Service::Status)> reply) override;
 
-        void startSource(serp::ResponsePtr<bool> reply, const std::string& source, const std::string& details) override;
+        void startSource(serp::ResponsePtr<bool> reply, const std::string& source) override;
         void stopSource(serp::ResponsePtr<bool> reply, const std::string& source) override;
         void playPrompt(serp::ResponsePtr<bool> reply, const std::string& prompt) override;
-        void setVolume(serp::ResponsePtr<bool> reply, const std::string& zone, const int32_t& volume) override;
+        void setVolume(serp::ResponsePtr<bool> reply, const AudioZone& zone, const int32_t& volume) override;
         void frame(serp::ResponsePtr<std::string> reply) override;
 
     private:

@@ -38,12 +38,11 @@ namespace Minivi
         reply(serp::Service::Status::SUCCESSFUL);
     }
 
-    void AudioHal::startSource(serp::ResponsePtr<bool> reply, const std::string& source, const std::string& details)
+    void AudioHal::startSource(serp::ResponsePtr<bool> reply, const std::string& source)
     {
-        logInfo() << "startSource source=" << source << " details=" << details;
-        ActiveAudioSource  = source;
-        ActiveAudioDetails = details;
-        AudioRouteChanged(source, details);
+        logInfo() << "startSource source=" << source;
+        ActiveAudioSource = source;
+        AudioRouteChanged(source);
         reply->call(true);
     }
 
@@ -51,9 +50,8 @@ namespace Minivi
     {
         logInfo() << "stopSource source=" << source;
         if (static_cast<std::string>(ActiveAudioSource) == source) {
-            ActiveAudioSource  = "";
-            ActiveAudioDetails = "";
-            AudioRouteChanged("", "");
+            ActiveAudioSource = "";
+            AudioRouteChanged("");
         }
         reply->call(true);
     }
@@ -65,17 +63,17 @@ namespace Minivi
         reply->call(true);
     }
 
-    void AudioHal::setVolume(serp::ResponsePtr<bool> reply, const std::string& zone, const int32_t& volume)
+    void AudioHal::setVolume(serp::ResponsePtr<bool> reply, const AudioZone& zone, const int32_t& volume)
     {
         logInfo() << "setVolume zone=" << zone << " volume=" << volume;
         const int32_t clamped = volume < 0 ? 0 : (volume > 100 ? 100 : volume);
-        if (zone == "driver" || zone == "all") {
+        if (zone == AudioZone::driver || zone == AudioZone::all) {
             DriverVolume = clamped;
-            VolumeChanged("driver", clamped);
+            VolumeChanged(AudioZone::driver, clamped);
         }
-        if (zone == "passenger" || zone == "all") {
+        if (zone == AudioZone::passenger || zone == AudioZone::all) {
             PassengerVolume = clamped;
-            VolumeChanged("passenger", clamped);
+            VolumeChanged(AudioZone::passenger, clamped);
         }
         reply->call(true);
     }
@@ -83,10 +81,9 @@ namespace Minivi
     void AudioHal::frame(serp::ResponsePtr<std::string> reply)
     {
         std::ostringstream out;
-        out << "audio.source="    << static_cast<std::string>(ActiveAudioSource)  << "\n";
-        out << "audio.details="   << static_cast<std::string>(ActiveAudioDetails) << "\n";
-        out << "audio.vol.driver="    << static_cast<int32_t>(DriverVolume)    << "\n";
-        out << "audio.vol.passenger=" << static_cast<int32_t>(PassengerVolume) << "\n";
+        out << "audio.source="        << static_cast<std::string>(ActiveAudioSource) << "\n";
+        out << "audio.vol.driver="    << static_cast<int32_t>(DriverVolume)          << "\n";
+        out << "audio.vol.passenger=" << static_cast<int32_t>(PassengerVolume)       << "\n";
         reply->call(out.str());
     }
 

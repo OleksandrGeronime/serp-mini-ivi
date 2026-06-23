@@ -20,6 +20,8 @@ namespace Minivi
         : PhoneHalBase()
     {
         logMethod("PhoneHal");
+        PhoneState.assignFromTransport(Minivi::PhoneCallState::idle);
+        PhoneCaller.assignFromTransport("");
     }
 
     PhoneHal::~PhoneHal() noexcept = default;
@@ -28,7 +30,12 @@ namespace Minivi
     {
         logInfo() << "onInit — loading BT contacts stub";
         // BT HFP phonebook stub — in production populated via AT+CPBR from headset
-        ContactsList = "Alex:+1-555-2539,Service:+1-800-SERPCAR,Home:+1-555-0100,Work:+1-555-4400";
+        ContactsList = std::vector<Contact>{
+            {"Alex",    "+1-555-2539"},
+            {"Service", "+1-800-SERPCAR"},
+            {"Home",    "+1-555-0100"},
+            {"Work",    "+1-555-4400"},
+        };
         reply(serp::Service::Status::SUCCESSFUL);
     }
 
@@ -40,30 +47,34 @@ namespace Minivi
 
     void PhoneHal::simulateIncoming(serp::ResponsePtr<bool> reply, const std::string& caller)
     {
-        logWarn() << "PhoneHal::simulateIncoming is not implemented in product implementation";
-        bool result{};
-        reply->call(result);
+        PhoneState = Minivi::PhoneCallState::ringing;
+        PhoneCaller = caller;
+        PhoneStateChanged(Minivi::PhoneCallState::ringing, caller);
+        reply->call(true);
     }
 
     void PhoneHal::accept(serp::ResponsePtr<bool> reply)
     {
-        logWarn() << "PhoneHal::accept is not implemented in product implementation";
-        bool result{};
-        reply->call(result);
+        PhoneState = Minivi::PhoneCallState::active;
+        PhoneStateChanged(Minivi::PhoneCallState::active, static_cast<std::string>(PhoneCaller));
+        reply->call(true);
     }
 
     void PhoneHal::end(serp::ResponsePtr<bool> reply)
     {
-        logWarn() << "PhoneHal::end is not implemented in product implementation";
-        bool result{};
-        reply->call(result);
+        PhoneState = Minivi::PhoneCallState::idle;
+        PhoneCaller = "";
+        PhoneStateChanged(Minivi::PhoneCallState::idle, "");
+        reply->call(true);
     }
 
     void PhoneHal::frame(serp::ResponsePtr<std::string> reply)
     {
-        logWarn() << "PhoneHal::frame is not implemented in product implementation";
-        std::string result{};
-        reply->call(result);
+        std::ostringstream out;
+        out << "phonehal.state="    << static_cast<Minivi::PhoneCallState>(PhoneState)                  << "\n";
+        out << "phonehal.caller="   << static_cast<std::string>(PhoneCaller)                         << "\n";
+        out << "phonehal.contacts=" << static_cast<std::vector<Contact>>(ContactsList).size()        << "\n";
+        reply->call(out.str());
     }
 
 } // namespace Minivi

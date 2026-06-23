@@ -26,7 +26,7 @@ namespace Minivi
 
     void ClimateHal::onInit(const std::function<void(serp::Service::Status)> reply)
     {
-        logWarn() << "ClimateHal::onInit is not implemented";
+        ClimateState.assignFromTransport(ClimateZoneState{ClimateZone::driver, 22, 2});
         reply(serp::Service::Status::SUCCESSFUL);
     }
 
@@ -36,11 +36,12 @@ namespace Minivi
         reply(serp::Service::Status::SUCCESSFUL);
     }
 
-    void ClimateHal::applyState(serp::ResponsePtr<bool> reply, const std::string& zone, const int32_t& temp, const int32_t& fan)
+    void ClimateHal::applyState(serp::ResponsePtr<bool> reply, const ClimateZone& zone, const int32_t& temp, const int32_t& fan)
     {
-        logWarn() << "ClimateHal::applyState is not implemented in product implementation";
-        bool result{};
-        reply->call(result);
+        logInfo() << "applyState zone=" << static_cast<int>(zone) << " temp=" << temp << " fan=" << fan;
+        ClimateState = ClimateZoneState{zone, temp, fan};
+        ClimateApplied(zone, temp, fan);
+        reply->call(true);
     }
 
     void ClimateHal::frame(serp::ResponsePtr<std::string> reply)

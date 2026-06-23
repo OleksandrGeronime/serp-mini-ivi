@@ -91,15 +91,15 @@ static const std::vector<std::string> kStationOrder = {
         reply->call(name);  // station name propagated up to CarRadioManager
     }
 
-    void RadioHal::seek(serp::ResponsePtr<std::string> reply, const std::string& direction)
+    void RadioHal::seek(serp::ResponsePtr<std::string> reply, const SeekDirection& direction)
     {
-        logInfo() << "seek direction=" << direction;
+        logInfo() << "seek direction=" << static_cast<int>(direction);
         const std::string current = static_cast<std::string>(CurrentRadioStation);
         const auto it = std::find(kStationOrder.begin(), kStationOrder.end(), current);
         std::string next;
         if (it == kStationOrder.end()) {
             next = kStationOrder.front();
-        } else if (direction == "up") {
+        } else if (direction == SeekDirection::up) {
             const auto nit = std::next(it);
             next = (nit == kStationOrder.end()) ? kStationOrder.front() : *nit;
         } else {
