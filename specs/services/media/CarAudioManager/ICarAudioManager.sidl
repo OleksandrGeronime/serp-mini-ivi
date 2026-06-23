@@ -3,13 +3,26 @@ interface:
     major: 1
     minor: 0
 
+FocusMode: enum
+  none
+  media
+  navigation
+  communication
+  notification
+  alert
+
+FocusDecision: enum
+  granted
+  denied
+  released
+
 property activeFocusOwner: String
-property activeFocusMode: String
+property activeFocusMode: FocusMode
 
-notification focusChanged(owner: String, mode: String, decision: String)
+notification focusChanged(owner: String, mode: FocusMode, decision: FocusDecision)
 
-method requestFocus(owner: String, priority: Int32, mode: String) -> decision: String
+method requestFocus(owner: String, priority: Int32, mode: FocusMode) -> decision: FocusDecision
 method releaseFocus(owner: String) -> ok: Boolean
 method focusOwner() -> owner: String
-method focusMode() -> mode: String
+method getFocusMode() -> mode: FocusMode
 method frame() -> text: String

@@ -3,13 +3,22 @@ interface:
     major: 1
     minor: 0
 
+import common/radio.sidl
+
+TunerEvent: enum
+  tuned
+  seek
+  bandFm
+  bandAm
+  stopped
+
 property station: String
 property signal: Int32
 property name: String
 
-notification tunerChanged(station: String, event: String)
+notification tunerChanged(station: String, event: TunerEvent)
 
 method tune(frequency: String) -> ok: Boolean
-method seek(direction: String) -> ok: Boolean
+method seek(direction: SeekDirection) -> ok: Boolean
 method tunerStation() -> station: String
 method frame() -> text: String

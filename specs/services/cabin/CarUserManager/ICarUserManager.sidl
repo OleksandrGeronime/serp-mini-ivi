@@ -3,19 +3,28 @@ interface:
     major: 1
     minor: 0
 
-property theme: String
-property units: String
+UserTheme: enum
+  light
+  dark
+  system
+
+UserUnits: enum
+  metric
+  imperial
+
+property theme: UserTheme
+property units: UserUnits
 property brightness: Int32
 property language: String
 property currentUser: String
 property activeSeat: String
 property userList: list<String>
 
-notification profileChanged(profile: String, progress: String)
+notification profileChanged(profile: String, progress: Int32)
 notification settingChanged(key: String, value: String)
 
-method setTheme(theme: String) -> ok: Boolean
-method setUnits(units: String) -> ok: Boolean
+method setTheme(theme: UserTheme) -> ok: Boolean
+method setUnits(units: UserUnits) -> ok: Boolean
 method setBrightness(level: Int32) -> ok: Boolean
 method setLanguage(lang: String) -> ok: Boolean
 method loadProfile(user: String) -> ok: Boolean

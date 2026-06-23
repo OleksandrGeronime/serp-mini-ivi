@@ -29,6 +29,10 @@ property trackList: vector<TrackInfo>
 property shuffleEnabled: Boolean
 property currentRepeatMode: RepeatMode
 
+FocusEvent: enum
+  lost
+  gained
+
 notification playbackChanged(state: PlaybackState, track: optional<TrackInfo>)
 
 method play(source: String) -> ok: Boolean
@@ -40,7 +44,7 @@ method getTrackList() -> tracks: vector<TrackInfo>
 method seekTo(positionMs: Int32) -> ok: Boolean
 method setShuffleEnabled(enabled: Boolean) -> ok: Boolean
 method setRepeatMode(mode: RepeatMode) -> ok: Boolean
-method onFocusEvent(event: String) -> ok: Boolean
+method onFocusEvent(event: FocusEvent) -> ok: Boolean
 method recent() -> tracks: vector<TrackInfo>
 method sourceHistory() -> history: map<String, TrackInfo>
 method getPlaybackState() -> state: PlaybackState

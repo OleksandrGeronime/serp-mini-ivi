@@ -3,23 +3,25 @@ interface:
     major: 1
     minor: 0
 
+import common/contacts.sidl
+
 CallState: enum
   idle
   ringing
   active
   ended
 
-property currentCallState: Int32
+property currentCallState: CallState
 property phoneNumber: String
 property contactName: String
-property contacts: list<String>
+property contacts: list<Contact>
 
-notification callChanged(state: String, number: String)
+notification callChanged(state: CallState, number: String)
 
 method incoming(caller: String) -> ok: Boolean
 method acceptCall() -> ok: Boolean
 method endCall() -> ok: Boolean
 method dial(number: String) -> ok: Boolean
-method callState() -> state: String
+method getCallState() -> state: CallState
 method callNumber() -> number: String
 method frame() -> text: String

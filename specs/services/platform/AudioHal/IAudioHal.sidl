@@ -3,16 +3,20 @@ interface:
     major: 1
     minor: 0
 
+AudioZone: enum
+  driver
+  passenger
+  all
+
 property activeAudioSource: String
-property activeAudioDetails: String
 property driverVolume: Int32
 property passengerVolume: Int32
 
-notification audioRouteChanged(source: String, details: String)
-notification volumeChanged(zone: String, volume: Int32)
+notification audioRouteChanged(source: String)
+notification volumeChanged(zone: AudioZone, volume: Int32)
 
-method startSource(source: String, details: String) -> ok: Boolean
+method startSource(source: String) -> ok: Boolean
 method stopSource(source: String) -> ok: Boolean
 method playPrompt(prompt: String) -> ok: Boolean
-method setVolume(zone: String, volume: Int32) -> ok: Boolean
+method setVolume(zone: AudioZone, volume: Int32) -> ok: Boolean
 method frame() -> text: String
