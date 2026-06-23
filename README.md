@@ -96,4 +96,8 @@ Screens: Home · Media · Radio · Navigation · Phone · Climate · Settings ·
 
 ## License
 
-Copyright (c) 2025-2026 Oleksandr Geronime. All rights reserved.
+This project (Minivi demo code) is released under the [MIT License](LICENSE).
+
+The underlying [SERP](https://github.com/OleksandrGeronime/serp) framework is distributed
+in binary form under separate terms: free for non-commercial use, commercial use requires
+a purchased license. See the SERP repository for details.
