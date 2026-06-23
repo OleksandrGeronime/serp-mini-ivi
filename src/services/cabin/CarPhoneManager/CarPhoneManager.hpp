@@ -26,7 +26,7 @@ namespace Minivi
         void acceptCall(serp::ResponsePtr<bool> reply) override;
         void endCall(serp::ResponsePtr<bool> reply) override;
         void dial(serp::ResponsePtr<bool> reply, const std::string& number) override;
-        void callState(serp::ResponsePtr<std::string> reply) override;
+        void getCallState(serp::ResponsePtr<CallState> reply) override;
         void callNumber(serp::ResponsePtr<std::string> reply) override;
         void frame(serp::ResponsePtr<std::string> reply) override;
     };

@@ -48,16 +48,16 @@ namespace Minivi
         reply(serp::Service::Status::SUCCESSFUL);
     }
 
-    void CarClimateManager::setTemperature(serp::ResponsePtr<bool> reply, const std::string& zone, const double& temp)
+    void CarClimateManager::setTemperature(serp::ResponsePtr<bool> reply, const ClimateZone& zone, const double& temp)
     {
-        logInfo() << "setTemperature zone=" << zone << " temp=" << temp;
-        if (zone == "driver" || zone == "all") {
+        logInfo() << "setTemperature zone=" << static_cast<int>(zone) << " temp=" << temp;
+        if (zone == ClimateZone::driver || zone == ClimateZone::all) {
             DriverTemp = temp;
         }
-        if (zone == "passenger" || zone == "all") {
+        if (zone == ClimateZone::passenger || zone == ClimateZone::all) {
             PassengerTemp = temp;
         }
-        HvacChanged(zone, std::to_string(temp), std::to_string(static_cast<int32_t>(FanSpeed)));
+        HvacChanged(zone, temp, static_cast<int32_t>(FanSpeed));
         reply->call(true);
     }
 
@@ -65,7 +65,7 @@ namespace Minivi
     {
         logInfo() << "setDriverTemp temp=" << temp;
         DriverTemp = temp;
-        HvacChanged("driver", std::to_string(temp), std::to_string(static_cast<int32_t>(FanSpeed)));
+        HvacChanged(ClimateZone::driver, temp, static_cast<int32_t>(FanSpeed));
         reply->call(true);
     }
 
@@ -73,7 +73,7 @@ namespace Minivi
     {
         logInfo() << "setPassengerTemp temp=" << temp;
         PassengerTemp = temp;
-        HvacChanged("passenger", std::to_string(temp), std::to_string(static_cast<int32_t>(FanSpeed)));
+        HvacChanged(ClimateZone::passenger, temp, static_cast<int32_t>(FanSpeed));
         reply->call(true);
     }
 
@@ -130,21 +130,6 @@ namespace Minivi
     {
         logInfo() << "applyProfile profile=" << profile;
         reply->call(true);
-    }
-
-    void CarClimateManager::hvacDriverTemperature(serp::ResponsePtr<std::string> reply)
-    {
-        reply->call(std::to_string(static_cast<double>(DriverTemp)));
-    }
-
-    void CarClimateManager::hvacPassengerTemperature(serp::ResponsePtr<std::string> reply)
-    {
-        reply->call(std::to_string(static_cast<double>(PassengerTemp)));
-    }
-
-    void CarClimateManager::hvacFan(serp::ResponsePtr<std::string> reply)
-    {
-        reply->call(std::to_string(static_cast<int32_t>(FanSpeed)));
     }
 
     void CarClimateManager::frame(serp::ResponsePtr<std::string> reply)

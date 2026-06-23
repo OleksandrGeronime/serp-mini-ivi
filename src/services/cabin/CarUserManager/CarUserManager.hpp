@@ -24,8 +24,8 @@ namespace Minivi
         void onInit(const std::function<void(serp::Service::Status)> reply) override;
         void onDeinit(const std::function<void(serp::Service::Status)> reply) override;
 
-        void setTheme(serp::ResponsePtr<bool> reply, const std::string& theme) override;
-        void setUnits(serp::ResponsePtr<bool> reply, const std::string& units) override;
+        void setTheme(serp::ResponsePtr<bool> reply, const Minivi::UserTheme& theme) override;
+        void setUnits(serp::ResponsePtr<bool> reply, const Minivi::UserUnits& units) override;
         void setBrightness(serp::ResponsePtr<bool> reply, const int32_t& level) override;
         void setLanguage(serp::ResponsePtr<bool> reply, const std::string& lang) override;
         void loadProfile(serp::ResponsePtr<bool> reply, const std::string& user) override;

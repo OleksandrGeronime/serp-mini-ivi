@@ -16,8 +16,8 @@ namespace Minivi
         : CarUserManagerBase(persistenceservice)
     {
         logMethod("CarUserManager");
-        Theme.assignFromTransport(std::string{"dark"});
-        Units.assignFromTransport(std::string{"metric"});
+        Theme.assignFromTransport(Minivi::UserTheme::dark);
+        Units.assignFromTransport(Minivi::UserUnits::metric);
         Brightness.assignFromTransport(80);
         Language.assignFromTransport(std::string{"en"});
         CurrentUser.assignFromTransport(std::string{"Driver"});
@@ -30,8 +30,8 @@ namespace Minivi
     void CarUserManager::onInit(const std::function<void(serp::Service::Status)> reply)
     {
         logInfo() << "onInit";
-        Theme      = static_cast<std::string>(Theme);
-        Units      = static_cast<std::string>(Units);
+        Theme      = static_cast<Minivi::UserTheme>(Theme);
+        Units      = static_cast<Minivi::UserUnits>(Units);
         Brightness = static_cast<int32_t>(Brightness);
         Language   = static_cast<std::string>(Language);
         CurrentUser = static_cast<std::string>(CurrentUser);
@@ -46,19 +46,19 @@ namespace Minivi
         reply(serp::Service::Status::SUCCESSFUL);
     }
 
-    void CarUserManager::setTheme(serp::ResponsePtr<bool> reply, const std::string& theme)
+    void CarUserManager::setTheme(serp::ResponsePtr<bool> reply, const Minivi::UserTheme& theme)
     {
-        logInfo() << "setTheme theme=" << theme;
+        logInfo() << "setTheme theme=" << static_cast<int>(theme);
         Theme = theme;
-        SettingChanged("theme", theme);
+        SettingChanged("theme", serp::toString(theme));
         reply->call(true);
     }
 
-    void CarUserManager::setUnits(serp::ResponsePtr<bool> reply, const std::string& units)
+    void CarUserManager::setUnits(serp::ResponsePtr<bool> reply, const Minivi::UserUnits& units)
     {
-        logInfo() << "setUnits units=" << units;
+        logInfo() << "setUnits units=" << static_cast<int>(units);
         Units = units;
-        SettingChanged("units", units);
+        SettingChanged("units", serp::toString(units));
         reply->call(true);
     }
 
@@ -82,7 +82,7 @@ namespace Minivi
     {
         logInfo() << "loadProfile user=" << user;
         CurrentUser = user;
-        ProfileChanged(user, "loaded");
+        ProfileChanged(user, 100);
         reply->call(true);
     }
 
@@ -98,8 +98,8 @@ namespace Minivi
         std::ostringstream out;
         out << "user.current="    << static_cast<std::string>(CurrentUser) << "\n";
         out << "user.seat="       << static_cast<std::string>(ActiveSeat)  << "\n";
-        out << "settings.theme="  << static_cast<std::string>(Theme)       << "\n";
-        out << "settings.units="  << static_cast<std::string>(Units)       << "\n";
+        out << "settings.theme="  << Theme       << "\n";
+        out << "settings.units="  << Units       << "\n";
         out << "settings.brightness=" << static_cast<int32_t>(Brightness)  << "\n";
         out << "settings.language=" << static_cast<std::string>(Language)  << "\n";
         reply->call(out.str());

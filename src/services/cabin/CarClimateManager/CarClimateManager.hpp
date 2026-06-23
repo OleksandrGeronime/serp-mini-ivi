@@ -22,7 +22,7 @@ namespace Minivi
         void onInit(const std::function<void(serp::Service::Status)> reply) override;
         void onDeinit(const std::function<void(serp::Service::Status)> reply) override;
 
-        void setTemperature(serp::ResponsePtr<bool> reply, const std::string& zone, const double& temp) override;
+        void setTemperature(serp::ResponsePtr<bool> reply, const ClimateZone& zone, const double& temp) override;
         void setDriverTemp(serp::ResponsePtr<bool> reply, const double& temp) override;
         void setPassengerTemp(serp::ResponsePtr<bool> reply, const double& temp) override;
         void setFan(serp::ResponsePtr<bool> reply, const int32_t& fan) override;
@@ -33,9 +33,6 @@ namespace Minivi
         void toggleFrontDefrost(serp::ResponsePtr<bool> reply) override;
         void toggleRearDefrost(serp::ResponsePtr<bool> reply) override;
         void applyProfile(serp::ResponsePtr<bool> reply, const std::string& profile) override;
-        void hvacDriverTemperature(serp::ResponsePtr<std::string> reply) override;
-        void hvacPassengerTemperature(serp::ResponsePtr<std::string> reply) override;
-        void hvacFan(serp::ResponsePtr<std::string> reply) override;
         void frame(serp::ResponsePtr<std::string> reply) override;
     };
 

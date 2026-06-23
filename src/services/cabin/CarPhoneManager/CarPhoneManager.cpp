@@ -17,10 +17,15 @@ namespace Minivi
         : CarPhoneManagerBase(phonehal)
     {
         logMethod("CarPhoneManager");
-        CurrentCallState.assignFromTransport(0);  // idle
+        CurrentCallState.assignFromTransport(CallState::idle);
         PhoneNumber.assignFromTransport(std::string{});
         ContactName.assignFromTransport(std::string{});
-        Contacts.assignFromTransport(std::vector<std::string>{"Alice", "Bob", "Charlie", "Diana"});
+        Contacts.assignFromTransport(std::vector<Contact>{
+            {"Alice",   ""},
+            {"Bob",     ""},
+            {"Charlie", ""},
+            {"Diana",   ""},
+        });
     }
 
     CarPhoneManager::~CarPhoneManager() noexcept = default;
@@ -28,7 +33,7 @@ namespace Minivi
     void CarPhoneManager::onInit(const std::function<void(serp::Service::Status)> reply)
     {
         logInfo() << "onInit";
-        CurrentCallState = static_cast<int32_t>(CurrentCallState);
+        CurrentCallState = static_cast<CallState>(CurrentCallState);
         reply(serp::Service::Status::SUCCESSFUL);
     }
 
@@ -41,46 +46,44 @@ namespace Minivi
     void CarPhoneManager::incoming(serp::ResponsePtr<bool> reply, const std::string& caller)
     {
         logInfo() << "incoming caller=" << caller;
-        CurrentCallState = 1;  // ringing
+        CurrentCallState = CallState::ringing;
         PhoneNumber      = caller;
         ContactName      = caller;
-        CallChanged("ringing", caller);
+        CallChanged(CallState::ringing, caller);
         reply->call(true);
     }
 
     void CarPhoneManager::acceptCall(serp::ResponsePtr<bool> reply)
     {
         logInfo() << "acceptCall";
-        CurrentCallState = 2;  // active
-        CallChanged("active", static_cast<std::string>(PhoneNumber));
+        CurrentCallState = CallState::active;
+        CallChanged(CallState::active, static_cast<std::string>(PhoneNumber));
         reply->call(true);
     }
 
     void CarPhoneManager::endCall(serp::ResponsePtr<bool> reply)
     {
         logInfo() << "endCall";
-        CurrentCallState = 0;  // idle
+        CurrentCallState = CallState::idle;
         PhoneNumber      = "";
         ContactName      = "";
-        CallChanged("", "");
+        CallChanged(CallState::idle, "");
         reply->call(true);
     }
 
     void CarPhoneManager::dial(serp::ResponsePtr<bool> reply, const std::string& number)
     {
         logInfo() << "dial number=" << number;
-        CurrentCallState = 1;  // ringing (outgoing)
+        CurrentCallState = CallState::ringing;
         PhoneNumber      = number;
         ContactName      = number;
-        CallChanged("ringing", number);
+        CallChanged(CallState::ringing, number);
         reply->call(true);
     }
 
-    void CarPhoneManager::callState(serp::ResponsePtr<std::string> reply)
+    void CarPhoneManager::getCallState(serp::ResponsePtr<CallState> reply)
     {
-        const int32_t state = static_cast<int32_t>(CurrentCallState);
-        const char* names[] = {"idle", "ringing", "active", "ended"};
-        reply->call(state >= 0 && state < 4 ? names[state] : "idle");
+        reply->call(static_cast<CallState>(CurrentCallState));
     }
 
     void CarPhoneManager::callNumber(serp::ResponsePtr<std::string> reply)
@@ -91,7 +94,7 @@ namespace Minivi
     void CarPhoneManager::frame(serp::ResponsePtr<std::string> reply)
     {
         std::ostringstream out;
-        out << "phone.state="  << static_cast<int32_t>(CurrentCallState) << "\n";
+        out << "phone.state="  << static_cast<int>(static_cast<CallState>(CurrentCallState)) << "\n";
         out << "phone.number=" << static_cast<std::string>(PhoneNumber)  << "\n";
         reply->call(out.str());
     }
