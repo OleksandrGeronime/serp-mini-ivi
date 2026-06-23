@@ -23,7 +23,7 @@ namespace Minivi
         void onDeinit(const std::function<void(serp::Service::Status)> reply) override;
 
         void tune(serp::ResponsePtr<bool> reply, const std::string& frequency) override;
-        void seek(serp::ResponsePtr<bool> reply, const std::string& direction) override;
+        void seek(serp::ResponsePtr<bool> reply, const SeekDirection& direction) override;
         void tunerStation(serp::ResponsePtr<std::string> reply) override;
         void frame(serp::ResponsePtr<std::string> reply) override;
     };

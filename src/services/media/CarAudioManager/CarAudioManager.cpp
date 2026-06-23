@@ -32,13 +32,13 @@ namespace Minivi
         reply(serp::Service::Status::SUCCESSFUL);
     }
 
-    void CarAudioManager::requestFocus(serp::ResponsePtr<std::string> reply, const std::string& owner, const int32_t& priority, const std::string& mode)
+    void CarAudioManager::requestFocus(serp::ResponsePtr<FocusDecision> reply, const std::string& owner, const int32_t& priority, const FocusMode& mode)
     {
-        logInfo() << "requestFocus owner=" << owner << " priority=" << priority << " mode=" << mode;
+        logInfo() << "requestFocus owner=" << owner << " priority=" << priority;
         ActiveFocusOwner = owner;
         ActiveFocusMode  = mode;
-        FocusChanged(owner, mode, "granted");
-        reply->call("granted");
+        FocusChanged(owner, mode, FocusDecision::granted);
+        reply->call(FocusDecision::granted);
     }
 
     void CarAudioManager::releaseFocus(serp::ResponsePtr<bool> reply, const std::string& owner)
@@ -46,8 +46,8 @@ namespace Minivi
         logInfo() << "releaseFocus owner=" << owner;
         if (static_cast<std::string>(ActiveFocusOwner) == owner) {
             ActiveFocusOwner = "";
-            ActiveFocusMode  = "";
-            FocusChanged("", "", "released");
+            ActiveFocusMode  = FocusMode::none;
+            FocusChanged("", FocusMode::none, FocusDecision::released);
         }
         reply->call(true);
     }
@@ -57,16 +57,16 @@ namespace Minivi
         reply->call(static_cast<std::string>(ActiveFocusOwner));
     }
 
-    void CarAudioManager::focusMode(serp::ResponsePtr<std::string> reply)
+    void CarAudioManager::getFocusMode(serp::ResponsePtr<FocusMode> reply)
     {
-        reply->call(static_cast<std::string>(ActiveFocusMode));
+        reply->call(static_cast<FocusMode>(ActiveFocusMode));
     }
 
     void CarAudioManager::frame(serp::ResponsePtr<std::string> reply)
     {
         std::ostringstream out;
         out << "audio.focus.owner=" << static_cast<std::string>(ActiveFocusOwner) << "\n";
-        out << "audio.focus.mode="  << static_cast<std::string>(ActiveFocusMode)  << "\n";
+        out << "audio.focus.mode="  << ActiveFocusMode << "\n";
         reply->call(out.str());
     }
 

@@ -37,7 +37,7 @@ namespace Minivi
         void seekTo(serp::ResponsePtr<bool> reply, const int32_t& positionMs) override;
         void setShuffleEnabled(serp::ResponsePtr<bool> reply, const bool& enabled) override;
         void setRepeatMode(serp::ResponsePtr<bool> reply, const RepeatMode& mode) override;
-        void onFocusEvent(serp::ResponsePtr<bool> reply, const std::string& event) override;
+        void onFocusEvent(serp::ResponsePtr<bool> reply, const FocusEvent& event) override;
         void recent(serp::ResponsePtr<std::vector<TrackInfo>> reply) override;
         void sourceHistory(serp::ResponsePtr<std::map<std::string, TrackInfo>> reply) override;
         void getPlaybackState(serp::ResponsePtr<PlaybackState> reply) override;

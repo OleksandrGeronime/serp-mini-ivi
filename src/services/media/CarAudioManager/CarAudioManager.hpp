@@ -22,10 +22,10 @@ namespace Minivi
         void onInit(const std::function<void(serp::Service::Status)> reply) override;
         void onDeinit(const std::function<void(serp::Service::Status)> reply) override;
 
-        void requestFocus(serp::ResponsePtr<std::string> reply, const std::string& owner, const int32_t& priority, const std::string& mode) override;
+        void requestFocus(serp::ResponsePtr<FocusDecision> reply, const std::string& owner, const int32_t& priority, const FocusMode& mode) override;
         void releaseFocus(serp::ResponsePtr<bool> reply, const std::string& owner) override;
         void focusOwner(serp::ResponsePtr<std::string> reply) override;
-        void focusMode(serp::ResponsePtr<std::string> reply) override;
+        void getFocusMode(serp::ResponsePtr<FocusMode> reply) override;
         void frame(serp::ResponsePtr<std::string> reply) override;
     };
 

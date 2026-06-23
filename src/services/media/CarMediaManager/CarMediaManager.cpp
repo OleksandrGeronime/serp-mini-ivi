@@ -439,16 +439,16 @@ const bool kHasFfplay = commandOnPath("ffplay");
         reply->call(true);
     }
 
-    void CarMediaManager::onFocusEvent(serp::ResponsePtr<bool> reply, const std::string& event)
+    void CarMediaManager::onFocusEvent(serp::ResponsePtr<bool> reply, const FocusEvent& event)
     {
-        logInfo() << "onFocusEvent event=" << event;
-        if (event == "lost") {
+        logInfo() << "onFocusEvent event=" << static_cast<int>(event);
+        if (event == FocusEvent::lost) {
             if (static_cast<PlaybackState>(CurrentPlaybackState) == PlaybackState::playing) {
                 if (mPlayPid > 0) kill(mPlayPid, SIGSTOP);
                 CurrentPlaybackState = PlaybackState::paused;
                 PlaybackChanged(PlaybackState::paused, static_cast<std::optional<TrackInfo>>(CurrentTrack));
             }
-        } else if (event == "gained") {
+        } else if (event == FocusEvent::gained) {
             if (static_cast<PlaybackState>(CurrentPlaybackState) == PlaybackState::paused && mPlayPid > 0) {
                 kill(mPlayPid, SIGCONT);
                 CurrentPlaybackState = PlaybackState::playing;

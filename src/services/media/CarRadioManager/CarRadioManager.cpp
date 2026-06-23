@@ -83,7 +83,7 @@ static std::pair<std::string, std::string> stationMeta(const std::string& freq) 
             // Signal=0 is the authoritative "not playing" indicator (snapshot uses signal>0).
             Name   = "";
             Signal = 0;
-            TunerChanged("", "stopped");
+            TunerChanged("", TunerEvent::stopped);
             reply->call(true);
             return;
         }
@@ -92,7 +92,7 @@ static std::pair<std::string, std::string> stationMeta(const std::string& freq) 
             Station = kDefaultFm;
             Name    = fmName;
             Signal  = 85;
-            TunerChanged(kDefaultFm, "band_fm");
+            TunerChanged(kDefaultFm, TunerEvent::bandFm);
             mRadioHal->Tune(kDefaultFm);
             reply->call(true);
             return;
@@ -102,7 +102,7 @@ static std::pair<std::string, std::string> stationMeta(const std::string& freq) 
             Station = kDefaultAm;
             Name    = amName;
             Signal  = 85;
-            TunerChanged(kDefaultAm, "band_am");
+            TunerChanged(kDefaultAm, TunerEvent::bandAm);
             mRadioHal->Tune(kDefaultAm);
             reply->call(true);
             return;
@@ -112,12 +112,12 @@ static std::pair<std::string, std::string> stationMeta(const std::string& freq) 
         Station = frequency;
         Name    = name;
         Signal  = 85;
-        TunerChanged(frequency, "tuned");
+        TunerChanged(frequency, TunerEvent::tuned);
         mRadioHal->Tune(frequency);
         reply->call(true);
     }
 
-    void CarRadioManager::seek(serp::ResponsePtr<bool> reply, const std::string& direction)
+    void CarRadioManager::seek(serp::ResponsePtr<bool> reply, const SeekDirection& direction)
     {
         logInfo() << "seek dir=" << direction;
         const std::string current = static_cast<std::string>(Station);
@@ -125,7 +125,7 @@ static std::pair<std::string, std::string> stationMeta(const std::string& freq) 
         std::string next;
         if (it == kPresets.end()) {
             next = kPresets.front();
-        } else if (direction == "up") {
+        } else if (direction == SeekDirection::up) {
             const auto nit = std::next(it);
             next = (nit == kPresets.end()) ? kPresets.front() : *nit;
         } else {
@@ -135,7 +135,7 @@ static std::pair<std::string, std::string> stationMeta(const std::string& freq) 
         Station = next;
         Name    = name;
         Signal  = 85;
-        TunerChanged(next, "seek");
+        TunerChanged(next, TunerEvent::seek);
         mRadioHal->Tune(next);
         reply->call(true);
     }
