@@ -148,12 +148,12 @@ ScreenData RemoteHmiClient::snapshot() {
     mLastSnapshot.gps.speed     = toStr(static_cast<double>(mCarNavigation->Speed));
     mLastSnapshot.gps.heading   = toStr(static_cast<double>(mCarNavigation->Heading));
 
-    mLastSnapshot.phone.state  = toStr(static_cast<int32_t>(mCarPhone->CurrentCallState));
+    mLastSnapshot.phone.state  = toStr(static_cast<Minivi::CallState>(mCarPhone->CurrentCallState));
     mLastSnapshot.phone.number = static_cast<std::string>(mCarPhone->PhoneNumber);
 
     mLastSnapshot.profile.active      = static_cast<std::string>(mCarUser->CurrentUser);
-    mLastSnapshot.settings.theme      = static_cast<std::string>(mCarUser->Theme);
-    mLastSnapshot.settings.units      = static_cast<std::string>(mCarUser->Units);
+    mLastSnapshot.settings.theme      = toStr(static_cast<Minivi::UserTheme>(mCarUser->Theme));
+    mLastSnapshot.settings.units      = toStr(static_cast<Minivi::UserUnits>(mCarUser->Units));
     mLastSnapshot.settings.brightness = toStr(static_cast<int32_t>(mCarUser->Brightness));
     mLastSnapshot.settings.layout     = "";
 
@@ -187,7 +187,7 @@ ScreenData RemoteHmiClient::snapshot() {
     mLastSnapshot.radio.status = (signal > 0) ? "playing" : "idle";
 
     // Phone contacts from CarPhoneManager
-    const auto contacts = static_cast<std::vector<std::string>>(mCarPhone->Contacts);
+    const auto contacts = static_cast<std::vector<Minivi::Contact>>(mCarPhone->Contacts);
     {
         std::ostringstream oss;
         for (std::size_t i = 0; i < contacts.size(); ++i) {
@@ -218,7 +218,7 @@ std::string RemoteHmiClient::dispatch(const std::string& user, const HmiAction& 
         mCarRadio->Tune(freq);
 
     } else if (action.id == action_id::RadioTunerSeek || action.id == "radio.tuner.seek") {
-        mCarRadio->Seek(argOr(action, 0, "up"));
+        mCarRadio->Seek(serp::parseArg<Minivi::SeekDirection>(argOr(action, 0, "up")));
 
     } else if (action.id == "media.play.at") {
         mCarMedia->PlayAt(intArgOr(action, 0, 0));
@@ -236,7 +236,7 @@ std::string RemoteHmiClient::dispatch(const std::string& user, const HmiAction& 
         mCarMedia->Previous();
 
     } else if (action.id == action_id::CarHvacSetTemperature || action.id == "climate.temperature" || action.id == "car.hvac.set_temperature") {
-        mCarClimate->SetTemperature(argOr(action, 0, "driver"), doubleArgOr(action, 1, 22.0));
+        mCarClimate->SetTemperature(serp::parseArg<Minivi::ClimateZone>(argOr(action, 0, "driver")), doubleArgOr(action, 1, 22.0));
 
     } else if (action.id == action_id::CarHvacSetFan || action.id == "climate.fan" || action.id == "car.hvac.set_fan") {
         mCarClimate->SetFanSpeed(intArgOr(action, 0, 2));
@@ -271,8 +271,8 @@ std::string RemoteHmiClient::dispatch(const std::string& user, const HmiAction& 
     } else if (action.id == action_id::CarUserSettingsSet || action.id == "car.user.settings.set") {
         const std::string key = argOr(action, 0);
         const std::string val = argOr(action, 1);
-        if (key == "theme")       mCarUser->SetTheme(val);
-        else if (key == "units")  mCarUser->SetUnits(val);
+        if (key == "theme")       mCarUser->SetTheme(serp::parseArg<Minivi::UserTheme>(val));
+        else if (key == "units")  mCarUser->SetUnits(serp::parseArg<Minivi::UserUnits>(val));
         else if (key == "language") mCarUser->SetLanguage(val);
         else if (key == "brightness") {
             try { mCarUser->SetBrightness(std::stoi(val)); } catch (...) {}
