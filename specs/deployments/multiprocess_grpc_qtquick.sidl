@@ -46,10 +46,16 @@ processes:
       SERP_GRPC_ADDRESS: "0.0.0.0:50054"
     logging:
       app_id: MED
-  hmi_screen_app:
+  phone_app:
     domain: service
     env:
       SERP_GRPC_ADDRESS: "0.0.0.0:50055"
+    logging:
+      app_id: PHN
+  hmi_screen_app:
+    domain: service
+    env:
+      SERP_GRPC_ADDRESS: "0.0.0.0:50056"
     logging:
       app_id: HMI
   hmi_app:

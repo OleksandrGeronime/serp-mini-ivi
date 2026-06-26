@@ -5,7 +5,11 @@ service:
   type: generated
 
 implements:
-  - IPhoneHal
+  - ICarContactsManager
+
+uses:
+  - IBtPbap
+  - IPersistenceService
 
 logging:
   console: debug

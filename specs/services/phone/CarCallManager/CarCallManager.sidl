@@ -5,10 +5,10 @@ service:
   type: generated
 
 implements:
-  - ICarPhoneManager
+  - ICarCallManager
 
 uses:
-  - IPhoneHal
+  - IBtHfp
 
 logging:
   console: debug

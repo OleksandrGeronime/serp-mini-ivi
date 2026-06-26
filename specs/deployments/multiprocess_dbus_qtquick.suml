@@ -31,7 +31,7 @@ skinparam component<<generated_client>> {
 package vehicle_hal_app {
   component VehicleHal <<generated_service>>
   component ClimateHal <<generated_service>>
-  component PhoneHal <<generated_service>>
+  component BtGateway <<generated_service>>
   component RadioHal <<generated_service>>
   component LocationHal <<generated_service>>
   component PersistenceHal <<generated_service>>
@@ -48,8 +48,12 @@ package car_service_app {
   component CarPowerManager <<generated_service>>
   component CarClimateManager <<generated_service>>
   component CarNavigationManager <<generated_service>>
-  component CarPhoneManager <<generated_service>>
   component CarUserManager <<generated_service>>
+}
+
+package phone_app {
+  component CarCallManager <<generated_service>>
+  component CarContactsManager <<generated_service>>
 }
 
 package media_app {
@@ -68,8 +72,10 @@ CarPropertyService --> PersistenceService : dbus
 CarPowerManager --> CarPropertyService : dbus
 CarClimateManager --> ClimateHal : dbus
 CarNavigationManager --> LocationHal : dbus
-CarPhoneManager --> PhoneHal : dbus
 CarUserManager --> PersistenceService : dbus
+CarCallManager --> BtGateway : dbus
+CarContactsManager --> BtGateway : dbus
+CarContactsManager --> PersistenceService : dbus
 
 CarAudioManager --> AudioHal : dbus
 CarMediaManager --> CarAudioManager : dbus
@@ -79,7 +85,8 @@ CarRadioManager --> PersistenceService : dbus
 
 QtQuickHmi --> CarClimateManager : dbus
 QtQuickHmi --> CarNavigationManager : dbus
-QtQuickHmi --> CarPhoneManager : dbus
+QtQuickHmi --> CarCallManager : dbus
+QtQuickHmi --> CarContactsManager : dbus
 QtQuickHmi --> CarUserManager : dbus
 QtQuickHmi --> CarPropertyService : dbus
 QtQuickHmi --> CarNotificationManager : dbus

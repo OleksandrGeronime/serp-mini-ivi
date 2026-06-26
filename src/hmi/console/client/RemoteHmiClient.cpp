@@ -3,6 +3,7 @@
 #include "HmiActions.hpp"
 
 #include <algorithm>
+#include <cstdio>
 #include <sstream>
 #include <stdexcept>
 
@@ -12,7 +13,8 @@
 #include "grpc/CarNotificationManagerProxy.hpp"
 #include "grpc/CarClimateManagerProxy.hpp"
 #include "grpc/CarNavigationManagerProxy.hpp"
-#include "grpc/CarPhoneManagerProxy.hpp"
+#include "grpc/CarCallManagerProxy.hpp"
+#include "grpc/CarContactsManagerProxy.hpp"
 #include "grpc/CarUserManagerProxy.hpp"
 #include "grpc/CarMediaManagerProxy.hpp"
 #include "grpc/CarRadioManagerProxy.hpp"
@@ -21,7 +23,8 @@
 #include "dbus/CarNotificationManagerProxy.hpp"
 #include "dbus/CarClimateManagerProxy.hpp"
 #include "dbus/CarNavigationManagerProxy.hpp"
-#include "dbus/CarPhoneManagerProxy.hpp"
+#include "dbus/CarCallManagerProxy.hpp"
+#include "dbus/CarContactsManagerProxy.hpp"
 #include "dbus/CarUserManagerProxy.hpp"
 #include "dbus/CarMediaManagerProxy.hpp"
 #include "dbus/CarRadioManagerProxy.hpp"
@@ -69,7 +72,8 @@ void RemoteHmiClient::start() {
     mCarNotification = transport::create_carnotificationmanager_icarnotificationmanager_proxy("hmi");
     mCarClimate      = transport::create_carclimatemanager_icarclimatemanager_proxy("hmi");
     mCarNavigation   = transport::create_carnavigationmanager_icarnavigationmanager_proxy("hmi");
-    mCarPhone        = transport::create_carphonemanager_icarphonemanager_proxy("hmi");
+    mCarCall         = transport::create_carcallmanager_icarcallmanager_proxy("hmi");
+    mCarContacts     = transport::create_carcontactsmanager_icarcontactsmanager_proxy("hmi");
     mCarUser         = transport::create_carusermanager_icarusermanager_proxy("hmi");
     mCarMedia        = transport::create_carmediamanager_icarmediamanager_proxy("hmi");
     mCarRadio        = transport::create_carradiomanager_icarradiomanager_proxy("hmi");
@@ -113,7 +117,8 @@ void RemoteHmiClient::stop() {
     mCarNotification.reset();
     mCarClimate.reset();
     mCarNavigation.reset();
-    mCarPhone.reset();
+    mCarCall.reset();
+    mCarContacts.reset();
     mCarUser.reset();
     mCarMedia.reset();
     mCarRadio.reset();
@@ -148,8 +153,29 @@ ScreenData RemoteHmiClient::snapshot() {
     mLastSnapshot.gps.speed     = toStr(static_cast<double>(mCarNavigation->Speed));
     mLastSnapshot.gps.heading   = toStr(static_cast<double>(mCarNavigation->Heading));
 
-    mLastSnapshot.phone.state  = toStr(static_cast<Minivi::CallState>(mCarPhone->CurrentCallState));
-    mLastSnapshot.phone.number = static_cast<std::string>(mCarPhone->PhoneNumber);
+    const auto callState = static_cast<Minivi::CallState>(mCarCall->CurrentCallState);
+    mLastSnapshot.phone.state       = toStr(callState);
+    mLastSnapshot.phone.number      = static_cast<std::string>(mCarCall->PhoneNumber);
+    mLastSnapshot.phone.contactName = static_cast<std::string>(mCarCall->ContactName);
+    mLastSnapshot.phone.direction   = toStr(static_cast<Minivi::CallDirection>(mCarCall->CurrentCallDirection));
+    mLastSnapshot.phone.muteActive  = static_cast<bool>(mCarCall->MuteActive);
+
+    if (callState == Minivi::CallState::active && !mCallTimerActive) {
+        mCallStartedAt   = std::chrono::steady_clock::now();
+        mCallTimerActive = true;
+    } else if (callState != Minivi::CallState::active) {
+        mCallTimerActive = false;
+    }
+    if (mCallTimerActive) {
+        const auto secs = std::chrono::duration_cast<std::chrono::seconds>(
+            std::chrono::steady_clock::now() - mCallStartedAt).count();
+        char buf[8];
+        std::snprintf(buf, sizeof(buf), "%02d:%02d",
+                      static_cast<int>(secs / 60), static_cast<int>(secs % 60));
+        mLastSnapshot.phone.callDuration = buf;
+    } else {
+        mLastSnapshot.phone.callDuration.clear();
+    }
 
     mLastSnapshot.profile.active      = static_cast<std::string>(mCarUser->CurrentUser);
     mLastSnapshot.settings.theme      = toStr(static_cast<Minivi::UserTheme>(mCarUser->Theme));
@@ -186,16 +212,32 @@ ScreenData RemoteHmiClient::snapshot() {
     }
     mLastSnapshot.radio.status = (signal > 0) ? "playing" : "idle";
 
-    // Phone contacts from CarPhoneManager
-    const auto contacts = static_cast<std::vector<Minivi::Contact>>(mCarPhone->Contacts);
-    {
-        std::ostringstream oss;
-        for (std::size_t i = 0; i < contacts.size(); ++i) {
-            if (i > 0) oss << ",";
-            oss << contacts[i];
-        }
-        mLastSnapshot.phone.contacts = oss.str();
+    // contacts
+    mLastSnapshot.phone.contacts.clear();
+    for (const auto& c : static_cast<std::vector<Minivi::Contact>>(mCarContacts->Contacts))
+        mLastSnapshot.phone.contacts.push_back({c.name, c.number});
+
+    mLastSnapshot.phone.favoriteContacts.clear();
+    for (const auto& c : static_cast<std::vector<Minivi::Contact>>(mCarContacts->FavoriteContacts))
+        mLastSnapshot.phone.favoriteContacts.push_back({c.name, c.number});
+
+    mLastSnapshot.phone.recentCalls.clear();
+    for (const auto& r : static_cast<std::vector<Minivi::CallRecord>>(mCarContacts->RecentCalls)) {
+        const uint32_t secs = r.durationSec;
+        char dur[8];
+        std::snprintf(dur, sizeof(dur), "%u:%02u", secs / 60, secs % 60);
+        mLastSnapshot.phone.recentCalls.push_back({r.name, r.number, toStr(r.direction), r.timestamp, dur});
     }
+
+    mLastSnapshot.phone.dialQuery = static_cast<std::string>(mCarContacts->DialQuery);
+    mLastSnapshot.phone.dialFilteredContacts.clear();
+    for (const auto& c : static_cast<std::vector<Minivi::Contact>>(mCarContacts->DialFilteredContacts))
+        mLastSnapshot.phone.dialFilteredContacts.push_back({c.name, c.number});
+
+    mLastSnapshot.phone.contactSearchQuery = static_cast<std::string>(mCarContacts->ContactSearchQuery);
+    mLastSnapshot.phone.contactSearchResults.clear();
+    for (const auto& c : static_cast<std::vector<Minivi::Contact>>(mCarContacts->ContactSearchResults))
+        mLastSnapshot.phone.contactSearchResults.push_back({c.name, c.number});
 
     // Notifications — copy from subscription cache
     {
@@ -250,17 +292,32 @@ std::string RemoteHmiClient::dispatch(const std::string& user, const HmiAction& 
     } else if (action.id == action_id::NavigationGuidancePrompt || action.id == "navigation.guidance.prompt") {
         mCarNavigation->NextPrompt();
 
-    } else if (action.id == action_id::TelecomCallSimulateIncoming || action.id == "phone.incoming" || action.id == "telecom.call.simulate_incoming") {
-        mCarPhone->Incoming(argOr(action, 0, "+1-555-0101"));
-
     } else if (action.id == action_id::TelecomCallAccept || action.id == "phone.accept" || action.id == "telecom.call.accept") {
-        mCarPhone->AcceptCall();
+        mCarCall->AcceptCall();
 
     } else if (action.id == action_id::TelecomCallEnd || action.id == "phone.end" || action.id == "telecom.call.end") {
-        mCarPhone->EndCall();
+        mCarCall->EndCall();
 
-    } else if (action.id == "phone.dial") {
-        mCarPhone->Dial(argOr(action, 0));
+    } else if (action.id == "phone.decline" || action.id == "telecom.call.decline") {
+        mCarCall->DeclineCall();
+
+    } else if (action.id == "phone.dial" || action.id == "telecom.call.dial") {
+        mCarCall->Dial(argOr(action, 0));
+
+    } else if (action.id == "phone.mute" || action.id == "telecom.call.mute") {
+        mCarCall->MuteCall();
+
+    } else if (action.id == "phone.unmute" || action.id == "telecom.call.unmute") {
+        mCarCall->UnmuteCall();
+
+    } else if (action.id == "phone.dtmf" || action.id == "telecom.call.dtmf") {
+        mCarCall->SendDtmf(argOr(action, 0));
+
+    } else if (action.id == "phone.set_dial_query" || action.id == "telecom.contacts.set_dial_query") {
+        mCarContacts->SetDialQuery(argOr(action, 0));
+
+    } else if (action.id == "phone.set_search_query" || action.id == "telecom.contacts.set_search_query") {
+        mCarContacts->SetContactSearchQuery(argOr(action, 0));
 
     } else if (action.id == action_id::CarUserProfileLoad || action.id == "profile.load" || action.id == "car.user.profile.load") {
         mCarUser->LoadProfile(argOr(action, 0, user));

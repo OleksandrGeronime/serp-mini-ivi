@@ -9,7 +9,8 @@
 namespace mini_hmi {
 
 enum class Seat { Driver, CoDriver };
-enum class Screen { Home, Media, Radio, Navigation, Phone, Climate, Settings, Profile, Vehicle, Notifications };
+enum class Screen { Home, Media, Radio, Navigation, Phone, Climate, Settings, Profile, Vehicle, Notifications,
+                    PhoneDialer, PhoneActiveCall, PhoneContactSearch };
 
 struct ButtonSpec {
     std::string id;

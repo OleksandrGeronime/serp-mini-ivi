@@ -1,0 +1,31 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+import common/phone.sidl
+
+CallState: enum
+  idle
+  dialing
+  ringing
+  active
+  ended
+
+property currentCallState: CallState
+property currentCallDirection: CallDirection
+property phoneNumber: String
+property contactName: String
+property muteActive: Boolean
+
+notification callChanged(state: CallState, number: String, direction: CallDirection)
+
+method dial(number: String) -> ok: Boolean
+method acceptCall() -> ok: Boolean
+method endCall() -> ok: Boolean
+method declineCall() -> ok: Boolean
+method muteCall() -> ok: Boolean
+method unmuteCall() -> ok: Boolean
+method sendDtmf(key: String) -> ok: Boolean
+method getCallState() -> state: CallState
+method frame() -> text: String

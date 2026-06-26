@@ -31,7 +31,7 @@ skinparam component<<generated_client>> {
 package minivi_app {
   component VehicleHal <<generated_service>>
   component ClimateHal <<generated_service>>
-  component PhoneHal <<generated_service>>
+  component BtGateway <<generated_service>>
   component RadioHal <<generated_service>>
   component LocationHal <<generated_service>>
   component AudioHal <<generated_service>>
@@ -43,8 +43,9 @@ package minivi_app {
   component CarPowerManager <<generated_service>>
   component CarClimateManager <<generated_service>>
   component CarNavigationManager <<generated_service>>
-  component CarPhoneManager <<generated_service>>
   component CarUserManager <<generated_service>>
+  component CarCallManager <<generated_service>>
+  component CarContactsManager <<generated_service>>
 
   component CarAudioManager <<generated_service>>
   component CarMediaManager <<generated_service>>
@@ -57,8 +58,10 @@ CarPropertyService --> PersistenceService : serp
 CarPowerManager --> CarPropertyService : serp
 CarClimateManager --> ClimateHal : serp
 CarNavigationManager --> LocationHal : serp
-CarPhoneManager --> PhoneHal : serp
 CarUserManager --> PersistenceService : serp
+CarCallManager --> BtGateway : serp
+CarContactsManager --> BtGateway : serp
+CarContactsManager --> PersistenceService : serp
 
 CarAudioManager --> AudioHal : serp
 CarMediaManager --> CarAudioManager : serp

@@ -2,6 +2,7 @@
 
 #include "HmiClient.hpp"
 
+#include <chrono>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -15,7 +16,8 @@
 #include "ICarNotificationManager.hpp"
 #include "ICarClimateManager.hpp"
 #include "ICarNavigationManager.hpp"
-#include "ICarPhoneManager.hpp"
+#include "ICarCallManager.hpp"
+#include "ICarContactsManager.hpp"
 #include "ICarUserManager.hpp"
 #include "ICarMediaManager.hpp"
 #include "ICarRadioManager.hpp"
@@ -41,10 +43,14 @@ private:
     std::shared_ptr<Minivi::ICarNotificationManager> mCarNotification;
     std::shared_ptr<Minivi::ICarClimateManager>      mCarClimate;
     std::shared_ptr<Minivi::ICarNavigationManager>   mCarNavigation;
-    std::shared_ptr<Minivi::ICarPhoneManager>        mCarPhone;
+    std::shared_ptr<Minivi::ICarCallManager>         mCarCall;
+    std::shared_ptr<Minivi::ICarContactsManager>     mCarContacts;
     std::shared_ptr<Minivi::ICarUserManager>         mCarUser;
     std::shared_ptr<Minivi::ICarMediaManager>        mCarMedia;
     std::shared_ptr<Minivi::ICarRadioManager>        mCarRadio;
+
+    std::chrono::steady_clock::time_point mCallStartedAt{};
+    bool mCallTimerActive{false};
 
     // Notification state
     mutable std::mutex mNotifMutex;

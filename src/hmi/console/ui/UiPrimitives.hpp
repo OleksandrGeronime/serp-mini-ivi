@@ -37,9 +37,10 @@ public:
     const std::vector<HitTarget>& targets() const { return mTargets; }
     std::string str() const;
 
+    void addTarget(Rect rect, std::string id);
+
 private:
     void put(int x, int y, char ch);
-    void addTarget(Rect rect, std::string id);
 
     int mWidth{0};
     int mHeight{0};

@@ -13,7 +13,8 @@
 #include "ICarMediaManager.hpp"
 #include "ICarClimateManager.hpp"
 #include "ICarNavigationManager.hpp"
-#include "ICarPhoneManager.hpp"
+#include "ICarCallManager.hpp"
+#include "ICarContactsManager.hpp"
 #include "ICarPropertyService.hpp"
 #include "ICarUserManager.hpp"
 #include "ICarNotificationManager.hpp"
@@ -27,7 +28,8 @@ namespace Minivi
                         std::shared_ptr<ICarMediaManager> media,
                         std::shared_ptr<ICarClimateManager> climate,
                         std::shared_ptr<ICarNavigationManager> navigation,
-                        std::shared_ptr<ICarPhoneManager> phone,
+                        std::shared_ptr<ICarCallManager> call,
+                        std::shared_ptr<ICarContactsManager> contacts,
                         std::shared_ptr<ICarPropertyService> vehicle,
                         std::shared_ptr<ICarUserManager> user,
                         std::shared_ptr<ICarNotificationManager> notifications);

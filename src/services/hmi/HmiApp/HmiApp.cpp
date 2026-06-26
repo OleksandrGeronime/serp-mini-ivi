@@ -10,11 +10,12 @@ namespace Minivi
                    std::shared_ptr<ICarMediaManager> media,
                    std::shared_ptr<ICarClimateManager> climate,
                    std::shared_ptr<ICarNavigationManager> navigation,
-                   std::shared_ptr<ICarPhoneManager> phone,
+                   std::shared_ptr<ICarCallManager> call,
+                   std::shared_ptr<ICarContactsManager> contacts,
                    std::shared_ptr<ICarPropertyService> vehicle,
                    std::shared_ptr<ICarUserManager> user,
                    std::shared_ptr<ICarNotificationManager> notifications)
-        : HmiAppBase(radio, media, climate, navigation, phone, vehicle, user, notifications)
+        : HmiAppBase(radio, media, climate, navigation, call, contacts, vehicle, user, notifications)
     {
         logMethod("HmiApp");
     }

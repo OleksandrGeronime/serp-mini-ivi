@@ -1,0 +1,18 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+import common/contacts.sidl
+import common/phone.sidl
+
+property contacts: list<Contact>
+property favoriteContacts: list<Contact>
+property recentCalls: list<CallRecord>
+property dialQuery: String
+property dialFilteredContacts: list<Contact>
+property contactSearchQuery: String
+property contactSearchResults: list<Contact>
+
+method setDialQuery(query: String) -> ok: Boolean
+method setContactSearchQuery(query: String) -> ok: Boolean

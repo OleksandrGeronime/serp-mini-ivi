@@ -1,0 +1,36 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+import common/contacts.sidl
+import common/phone.sidl
+
+PbapFolder: enum
+  phoneBook
+  simPhoneBook
+
+CallHistoryType: enum
+  incoming
+  outgoing
+  missed
+  combined
+
+PbapSyncState: enum
+  idle
+  syncing
+  complete
+  failed
+
+property syncState: PbapSyncState
+property contacts: list<Contact>
+property callHistory: list<CallRecord>
+
+notification syncStateChanged(state: PbapSyncState)
+notification syncProgress(folder: PbapFolder, loaded: UInt32, total: UInt32)
+notification contactsReady(contacts: list<Contact>)
+notification callHistoryReady(records: list<CallRecord>)
+
+method pullPhoneBook(folder: PbapFolder) -> ok: Boolean
+method pullCallHistory(type: CallHistoryType) -> ok: Boolean
+method cancelSync() -> ok: Boolean

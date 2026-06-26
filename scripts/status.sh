@@ -46,7 +46,7 @@ case "$resolved" in
     PROC_KEYS+=(p0)
     PROC_NAME[p0]="vehicle_hal_app"
     PROC_EXE[p0]="${build_dir}/multiprocess_dbus_console/multiprocess_dbus_console_vehicle_hal_app"
-    PROC_DBUS[p0]="serp.generated.vehiclehal serp.generated.climatehal serp.generated.phonehal serp.generated.radiohal serp.generated.locationhal serp.generated.persistencehal"
+    PROC_DBUS[p0]="serp.generated.vehiclehal serp.generated.climatehal serp.generated.btgateway serp.generated.radiohal serp.generated.locationhal serp.generated.persistencehal"
     PROC_KEYS+=(p1)
     PROC_NAME[p1]="audio_hal_app"
     PROC_EXE[p1]="${build_dir}/multiprocess_dbus_console/multiprocess_dbus_console_audio_hal_app"
@@ -54,18 +54,22 @@ case "$resolved" in
     PROC_KEYS+=(p2)
     PROC_NAME[p2]="car_service_app"
     PROC_EXE[p2]="${build_dir}/multiprocess_dbus_console/multiprocess_dbus_console_car_service_app"
-    PROC_DBUS[p2]="serp.generated.persistenceservice serp.generated.carnotificationmanager serp.generated.carpropertyservice serp.generated.carpowermanager serp.generated.carclimatemanager serp.generated.carnavigationmanager serp.generated.carphonemanager serp.generated.carusermanager"
+    PROC_DBUS[p2]="serp.generated.persistenceservice serp.generated.carnotificationmanager serp.generated.carpropertyservice serp.generated.carpowermanager serp.generated.carclimatemanager serp.generated.carnavigationmanager serp.generated.carusermanager"
     PROC_KEYS+=(p3)
-    PROC_NAME[p3]="media_app"
-    PROC_EXE[p3]="${build_dir}/multiprocess_dbus_console/multiprocess_dbus_console_media_app"
-    PROC_DBUS[p3]="serp.generated.caraudiomanager serp.generated.carmediamanager serp.generated.carradiomanager"
+    PROC_NAME[p3]="phone_app"
+    PROC_EXE[p3]="${build_dir}/multiprocess_dbus_console/multiprocess_dbus_console_phone_app"
+    PROC_DBUS[p3]="serp.generated.carcallmanager serp.generated.carcontactsmanager"
+    PROC_KEYS+=(p4)
+    PROC_NAME[p4]="media_app"
+    PROC_EXE[p4]="${build_dir}/multiprocess_dbus_console/multiprocess_dbus_console_media_app"
+    PROC_DBUS[p4]="serp.generated.caraudiomanager serp.generated.carmediamanager serp.generated.carradiomanager"
     ;;
   'multiprocess_dbus_qtquick')
     PROC_KEYS=()
     PROC_KEYS+=(p0)
     PROC_NAME[p0]="vehicle_hal_app"
     PROC_EXE[p0]="${build_dir}/multiprocess_dbus_qtquick/multiprocess_dbus_qtquick_vehicle_hal_app"
-    PROC_DBUS[p0]="serp.generated.vehiclehal serp.generated.climatehal serp.generated.phonehal serp.generated.radiohal serp.generated.locationhal serp.generated.persistencehal"
+    PROC_DBUS[p0]="serp.generated.vehiclehal serp.generated.climatehal serp.generated.btgateway serp.generated.radiohal serp.generated.locationhal serp.generated.persistencehal"
     PROC_KEYS+=(p1)
     PROC_NAME[p1]="audio_hal_app"
     PROC_EXE[p1]="${build_dir}/multiprocess_dbus_qtquick/multiprocess_dbus_qtquick_audio_hal_app"
@@ -73,11 +77,15 @@ case "$resolved" in
     PROC_KEYS+=(p2)
     PROC_NAME[p2]="car_service_app"
     PROC_EXE[p2]="${build_dir}/multiprocess_dbus_qtquick/multiprocess_dbus_qtquick_car_service_app"
-    PROC_DBUS[p2]="serp.generated.persistenceservice serp.generated.carnotificationmanager serp.generated.carpropertyservice serp.generated.carpowermanager serp.generated.carclimatemanager serp.generated.carnavigationmanager serp.generated.carphonemanager serp.generated.carusermanager"
+    PROC_DBUS[p2]="serp.generated.persistenceservice serp.generated.carnotificationmanager serp.generated.carpropertyservice serp.generated.carpowermanager serp.generated.carclimatemanager serp.generated.carnavigationmanager serp.generated.carusermanager"
     PROC_KEYS+=(p3)
-    PROC_NAME[p3]="media_app"
-    PROC_EXE[p3]="${build_dir}/multiprocess_dbus_qtquick/multiprocess_dbus_qtquick_media_app"
-    PROC_DBUS[p3]="serp.generated.caraudiomanager serp.generated.carmediamanager serp.generated.carradiomanager"
+    PROC_NAME[p3]="phone_app"
+    PROC_EXE[p3]="${build_dir}/multiprocess_dbus_qtquick/multiprocess_dbus_qtquick_phone_app"
+    PROC_DBUS[p3]="serp.generated.carcallmanager serp.generated.carcontactsmanager"
+    PROC_KEYS+=(p4)
+    PROC_NAME[p4]="media_app"
+    PROC_EXE[p4]="${build_dir}/multiprocess_dbus_qtquick/multiprocess_dbus_qtquick_media_app"
+    PROC_DBUS[p4]="serp.generated.caraudiomanager serp.generated.carmediamanager serp.generated.carradiomanager"
     ;;
   'multiprocess_grpc_qtquick')
     PROC_KEYS=()
@@ -94,9 +102,13 @@ case "$resolved" in
     PROC_EXE[p2]="${build_dir}/multiprocess_grpc_qtquick/multiprocess_grpc_qtquick_car_service_app"
     PROC_DBUS[p2]=""
     PROC_KEYS+=(p3)
-    PROC_NAME[p3]="media_app"
-    PROC_EXE[p3]="${build_dir}/multiprocess_grpc_qtquick/multiprocess_grpc_qtquick_media_app"
+    PROC_NAME[p3]="phone_app"
+    PROC_EXE[p3]="${build_dir}/multiprocess_grpc_qtquick/multiprocess_grpc_qtquick_phone_app"
     PROC_DBUS[p3]=""
+    PROC_KEYS+=(p4)
+    PROC_NAME[p4]="media_app"
+    PROC_EXE[p4]="${build_dir}/multiprocess_grpc_qtquick/multiprocess_grpc_qtquick_media_app"
+    PROC_DBUS[p4]=""
     ;;
   *) echo "Invalid or unknown deployment: $resolved" >&2; exit 2 ;;
 esac

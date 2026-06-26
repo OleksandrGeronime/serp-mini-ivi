@@ -63,6 +63,13 @@ processes:
       - serp-multiprocess-dbus-qtquick-car-service-app.service
     logging:
       app_id: MED
+  phone_app:
+    domain: system_services
+    start_after:
+      - serp-multiprocess-dbus-qtquick-vehicle-hal-app.service
+      - serp-multiprocess-dbus-qtquick-car-service-app.service
+    logging:
+      app_id: PHN
   hmi_app:
     domain: cockpit_hmi
     template: qtquick_hmi

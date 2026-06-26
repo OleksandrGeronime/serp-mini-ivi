@@ -18,6 +18,7 @@ struct HmiModule {
     std::vector<std::string> aliases;
     std::vector<ButtonSpec> buttons;
     ModuleRenderFn render;
+    bool hidden{false};
 };
 
 const std::vector<HmiModule>& hmiModules();
@@ -34,5 +35,9 @@ HmiModule settingsModule();
 HmiModule profileModule();
 HmiModule vehicleModule();
 HmiModule notificationsModule();
+
+HmiModule phoneDialerModule();
+HmiModule phoneActiveCallModule();
+HmiModule phoneContactSearchModule();
 
 } // namespace mini_hmi

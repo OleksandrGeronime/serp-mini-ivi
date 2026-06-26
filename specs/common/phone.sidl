@@ -1,0 +1,16 @@
+types:
+  version:
+    major: 1
+    minor: 0
+
+CallDirection: enum
+  incoming
+  outgoing
+  missed
+
+CallRecord: struct
+  name: String
+  number: String
+  direction: CallDirection
+  timestamp: String
+  durationSec: UInt32

@@ -31,7 +31,7 @@ skinparam component<<generated_client>> {
 package vehicle_hal_app {
   component VehicleHal <<generated_service>>
   component ClimateHal <<generated_service>>
-  component PhoneHal <<generated_service>>
+  component BtGateway <<generated_service>>
   component RadioHal <<generated_service>>
   component LocationHal <<generated_service>>
 }
@@ -47,8 +47,12 @@ package car_service_app {
   component CarPowerManager <<generated_service>>
   component CarClimateManager <<generated_service>>
   component CarNavigationManager <<generated_service>>
-  component CarPhoneManager <<generated_service>>
   component CarUserManager <<generated_service>>
+}
+
+package phone_app {
+  component CarCallManager <<generated_service>>
+  component CarContactsManager <<generated_service>>
 }
 
 package media_app {
@@ -68,8 +72,10 @@ CarPropertyService --> PersistenceService : grpc
 CarPowerManager --> CarPropertyService : grpc
 CarClimateManager --> ClimateHal : grpc
 CarNavigationManager --> LocationHal : grpc
-CarPhoneManager --> PhoneHal : grpc
 CarUserManager --> PersistenceService : grpc
+CarCallManager --> BtGateway : grpc
+CarContactsManager --> BtGateway : grpc
+CarContactsManager --> PersistenceService : grpc
 
 ' --- media_app ---
 CarAudioManager --> AudioHal : grpc
@@ -81,7 +87,8 @@ CarRadioManager --> PersistenceService : grpc
 ' --- hmi_app → car_service_app ---
 QtQuickHmi --> CarClimateManager : grpc
 QtQuickHmi --> CarNavigationManager : grpc
-QtQuickHmi --> CarPhoneManager : grpc
+QtQuickHmi --> CarCallManager : grpc
+QtQuickHmi --> CarContactsManager : grpc
 QtQuickHmi --> CarUserManager : grpc
 QtQuickHmi --> CarPropertyService : grpc
 QtQuickHmi --> CarNotificationManager : grpc

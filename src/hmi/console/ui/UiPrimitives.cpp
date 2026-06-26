@@ -120,6 +120,7 @@ void Canvas::appRail(Rect rect, Screen active) {
     box(rect, "APPS");
     int y = rect.y + 2;
     for (const auto& module : hmiModules()) {
+        if (module.hidden) continue;
         const auto screen = module.screen;
         const bool selected = screen == active;
         const std::string line = std::string(selected ? "> " : "  ") + module.title;

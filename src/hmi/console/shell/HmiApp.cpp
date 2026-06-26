@@ -16,10 +16,17 @@ HmiApp::HmiApp(HmiController& controller)
 void HmiApp::moveScreen(int delta) {
     auto model = mController.viewModel();
     const auto& modules = hmiModules();
-    auto it = std::find_if(modules.begin(), modules.end(), [&model](const HmiModule& module) { return module.screen == model.screen; });
-    int index = it == modules.end() ? 0 : static_cast<int>(std::distance(modules.begin(), it));
-    index = (index + delta + static_cast<int>(modules.size())) % static_cast<int>(modules.size());
-    mController.switchScreen(modules[static_cast<std::size_t>(index)].screen);
+    std::vector<int> visible;
+    for (int i = 0; i < static_cast<int>(modules.size()); ++i) {
+        if (!modules[static_cast<std::size_t>(i)].hidden) visible.push_back(i);
+    }
+    if (visible.empty()) return;
+    auto cur = std::find_if(visible.begin(), visible.end(), [&](int i) {
+        return modules[static_cast<std::size_t>(i)].screen == model.screen;
+    });
+    int pos = (cur == visible.end()) ? 0 : static_cast<int>(std::distance(visible.begin(), cur));
+    pos = (pos + delta + static_cast<int>(visible.size())) % static_cast<int>(visible.size());
+    mController.switchScreen(modules[static_cast<std::size_t>(visible[static_cast<std::size_t>(pos)])].screen);
 }
 
 void HmiApp::handleEvent(const InputEvent& event, const std::vector<HitTarget>& hitTargets, bool& running) {

@@ -14,6 +14,9 @@ const std::vector<HmiModule>& hmiModules() {
         profileModule(),
         vehicleModule(),
         notificationsModule(),
+        phoneDialerModule(),
+        phoneActiveCallModule(),
+        phoneContactSearchModule(),
     };
     return modules;
 }

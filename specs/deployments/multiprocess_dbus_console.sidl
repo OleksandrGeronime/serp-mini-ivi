@@ -39,6 +39,11 @@ processes:
     start_after:
       - serp-multiprocess-dbus-console-audio-hal-app.service
       - serp-multiprocess-dbus-console-car-service-app.service
+  phone_app:
+    domain: service
+    start_after:
+      - serp-multiprocess-dbus-console-vehicle-hal-app.service
+      - serp-multiprocess-dbus-console-car-service-app.service
   hmi_app:
     domain: hmi_session
     template: console_hmi

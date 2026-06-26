@@ -5,6 +5,19 @@
 
 namespace mini_hmi {
 
+struct ContactItem {
+    std::string name;
+    std::string number;
+};
+
+struct RecentCallItem {
+    std::string name;
+    std::string number;
+    std::string direction;
+    std::string timestamp;
+    std::string duration;
+};
+
 struct MediaState {
     std::string state{"stopped"};
     std::string source{"none"};
@@ -35,8 +48,20 @@ struct NavigationState {
 
 struct PhoneState {
     std::string state{"idle"};
-    std::string number{"none"};
-    std::string contacts{};  // "Name:Number,Name:Number" from PhoneHal BT stub
+    std::string number{};
+    std::string contactName{};
+    std::string direction{};
+    bool        muteActive{false};
+    std::string callDuration{};
+    std::string activeTab{"favorites"};
+
+    std::vector<ContactItem>    contacts;
+    std::vector<ContactItem>    favoriteContacts;
+    std::vector<RecentCallItem> recentCalls;
+    std::vector<ContactItem>    dialFilteredContacts;
+    std::string                 dialQuery{};
+    std::vector<ContactItem>    contactSearchResults;
+    std::string                 contactSearchQuery{};
 };
 
 struct ClimateState {

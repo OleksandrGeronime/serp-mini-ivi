@@ -1,0 +1,77 @@
+interface:
+  version:
+    major: 1
+    minor: 0
+
+BtConnectionState: enum
+  disconnected
+  connecting
+  connected
+
+HfpAudioState: enum
+  disconnected
+  connecting
+  connected
+
+HfpAudioCodec: enum
+  none
+  cvsd
+  msbc
+
+HfpCallDirection: enum
+  outgoing
+  incoming
+
+HfpCallStatus: enum
+  active
+  held
+  dialing
+  alerting
+  incoming
+  waiting
+
+HfpCall: struct
+  idx: UInt32
+  direction: HfpCallDirection
+  status: HfpCallStatus
+  number: String
+  multiParty: Boolean
+
+property connectionState: BtConnectionState
+property deviceName: String
+property deviceAddress: String
+
+property audioState: HfpAudioState
+property audioCodec: HfpAudioCodec
+
+property activeCalls: list<HfpCall>
+
+property networkService: Boolean
+property signalStrength: Int32
+property roaming: Boolean
+property batteryLevel: Int32
+
+property micVolume: Int32
+property speakerVolume: Int32
+property micMuted: Boolean
+
+notification connectionStateChanged(state: BtConnectionState, deviceName: String)
+notification callListChanged(calls: list<HfpCall>)
+notification audioStateChanged(state: HfpAudioState, codec: HfpAudioCodec)
+notification networkIndicatorsChanged(service: Boolean, signal: Int32, roaming: Boolean, battery: Int32)
+notification volumeChanged(mic: Int32, speaker: Int32)
+
+method dial(number: String) -> ok: Boolean
+method redial() -> ok: Boolean
+method answer() -> ok: Boolean
+method reject() -> ok: Boolean
+method hangup() -> ok: Boolean
+method holdAndAnswer() -> ok: Boolean
+method releaseAndAnswer() -> ok: Boolean
+method releaseAllHeld() -> ok: Boolean
+method sendDtmf(key: String) -> ok: Boolean
+method setMicMute(muted: Boolean) -> ok: Boolean
+method setMicVolume(level: Int32) -> ok: Boolean
+method setSpeakerVolume(level: Int32) -> ok: Boolean
+method connectAudio() -> ok: Boolean
+method disconnectAudio() -> ok: Boolean

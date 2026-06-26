@@ -5,7 +5,8 @@
 #include "ICarMediaManager.hpp"
 #include "ICarClimateManager.hpp"
 #include "ICarNavigationManager.hpp"
-#include "ICarPhoneManager.hpp"
+#include "ICarCallManager.hpp"
+#include "ICarContactsManager.hpp"
 #include "ICarPropertyService.hpp"
 #include "ICarUserManager.hpp"
 #include "ICarNotificationManager.hpp"
@@ -20,7 +21,8 @@
 #include "grpc/CarMediaManagerProxy.hpp"
 #include "grpc/CarClimateManagerProxy.hpp"
 #include "grpc/CarNavigationManagerProxy.hpp"
-#include "grpc/CarPhoneManagerProxy.hpp"
+#include "grpc/CarCallManagerProxy.hpp"
+#include "grpc/CarContactsManagerProxy.hpp"
 #include "grpc/CarPropertyServiceProxy.hpp"
 #include "grpc/CarUserManagerProxy.hpp"
 #include "grpc/CarNotificationManagerProxy.hpp"
@@ -29,7 +31,8 @@
 #include "dbus/CarMediaManagerProxy.hpp"
 #include "dbus/CarClimateManagerProxy.hpp"
 #include "dbus/CarNavigationManagerProxy.hpp"
-#include "dbus/CarPhoneManagerProxy.hpp"
+#include "dbus/CarCallManagerProxy.hpp"
+#include "dbus/CarContactsManagerProxy.hpp"
 #include "dbus/CarPropertyServiceProxy.hpp"
 #include "dbus/CarUserManagerProxy.hpp"
 #include "dbus/CarNotificationManagerProxy.hpp"
@@ -59,7 +62,8 @@ int main(int argc, char** argv) {
     auto iCarMediaManager        = ns::create_carmediamanager_icarmediamanager_proxy("hmi");
     auto iCarClimateManager      = ns::create_carclimatemanager_icarclimatemanager_proxy("hmi");
     auto iCarNavigationManager   = ns::create_carnavigationmanager_icarnavigationmanager_proxy("hmi");
-    auto iCarPhoneManager        = ns::create_carphonemanager_icarphonemanager_proxy("hmi");
+    auto iCarCallManager         = ns::create_carcallmanager_icarcallmanager_proxy("hmi");
+    auto iCarContactsManager     = ns::create_carcontactsmanager_icarcontactsmanager_proxy("hmi");
     auto iCarPropertyService     = ns::create_carpropertyservice_icarpropertyservice_proxy("hmi");
     auto iCarUserManager         = ns::create_carusermanager_icarusermanager_proxy("hmi");
     auto iCarNotificationManager = ns::create_carnotificationmanager_icarnotificationmanager_proxy("hmi");
@@ -67,7 +71,8 @@ int main(int argc, char** argv) {
     QQmlApplicationEngine engine;
     Minivi::HmiQtRegistry::init(engine, iCarRadioManager, iCarMediaManager,
                                        iCarClimateManager, iCarNavigationManager,
-                                       iCarPhoneManager, iCarPropertyService,
+                                       iCarCallManager, iCarContactsManager,
+                                       iCarPropertyService,
                                        iCarUserManager, iCarNotificationManager);
 
     engine.load(QUrl(QStringLiteral("qrc:/qml/Main.qml")));
